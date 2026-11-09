@@ -1,111 +1,219 @@
+/* Styles that were inline <style> blocks on devfestbelgaum.in.
+   Bootstrap + the theme stylesheet are loaded from /public via index.html. */
+
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+
+/* ---------- DevFest 2026 brand tokens (from the 2026 Brand Guide) ---------- */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --color1: #4285f4; /* Blue 500 */
+  --color2: #ea4335; /* Red 500 */
+  --color3: #f9ab00; /* Yellow 600 */
+  --color4: #34a853; /* Green 500 */
+  --halftone-blue: #57caff;
+  --halftone-green: #5cdb6d;
+  --halftone-yellow: #ffd427;
+  --halftone-red: #ff7daf;
+  --pastel-blue: #c3ecf6;
+  --pastel-green: #ccf6c5;
+  --pastel-yellow: #ffe7a5;
+  --pastel-red: #f8d8d8;
+  --off-white: #f0f0f0;
+  --black-02: #1e1e1e;
+  --outline: 3px solid var(--black-02);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+body, .btn, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .subtitle {
+  font-family: 'Google Sans', 'Product Sans', 'Poppins', sans-serif;
 }
+body { color: #3c3c3c; }
+h1, h2, h3, h4, h5, h6 { color: var(--black-02); }
+.stroke-text { -webkit-text-stroke-width: 2px; }
 
-body {
-  margin: 0;
+/* Outlined "sticker" look used throughout the 2026 assets */
+.btn { border: var(--outline); box-shadow: 4px 4px 0 var(--black-02); }
+.btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--black-02); }
+.btn-hero:hover { border-color: var(--black-02); }
+.feature-box { border: var(--outline); border-radius: 24px; box-shadow: 6px 6px 0 var(--black-02); }
+.feature-box h4 { color: #fff; }
+.time-table li { box-shadow: 6px 6px 0 var(--black-02); }
+.about-img { border: var(--outline); }
+.speaker-block .img-block img { border: var(--outline); }
+.heading h2:before { background: var(--black-02); }
+
+/* Navbar */
+.main-nav { border-bottom: var(--outline); }
+.main-nav .nav-link:hover { color: var(--color1); }
+
+/* ---------- Hero ---------- */
+.hero-2026 {
+  background: var(--off-white);
+  margin-top: 80px;
+  padding: 70px 0 110px;
+  overflow: hidden;
 }
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
+.hero-tagline { margin-top: 18px; font-weight: 700; letter-spacing: 0.08em; color: #444; font-size: 16px; }
+.hero-wordmark { width: min(560px, 88vw); margin: 22px auto 0; display: block; }
+.hero-pills { display: flex; justify-content: center; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
+.pill {
+  display: inline-block;
+  border: var(--outline);
+  border-radius: 999px;
+  padding: 6px 34px;
+  font-size: 28px;
   font-weight: 500;
-  color: var(--text-h);
+  color: var(--black-02);
+  background: #fff;
+  line-height: 1.3;
+}
+.pill-location { min-width: min(380px, 70vw); }
+.pill-year { background: var(--color3); }
+.section-banner .banner-content h1.hero-title { font-size: 40px; margin: 34px 0 18px; letter-spacing: -0.02em; }
+.hero-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; font-weight: 700; margin-bottom: 30px; font-size: 15px; }
+.hero-meta i { color: var(--color2); font-size: 20px; vertical-align: -2px; margin-right: 4px; }
+@media (max-width: 767px) {
+  .section-banner .banner-content h1.hero-title { font-size: 28px; }
+  .pill { font-size: 20px; }
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+/* Floating stickers */
+.sticker-field { position: absolute; inset: 0; pointer-events: none; }
+.sticker {
+  position: absolute;
+  transform: rotate(var(--r));
+  animation: float 6s ease-in-out infinite;
+  filter: drop-shadow(3px 4px 0 rgba(30, 30, 30, 0.12));
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--r)); }
+  50% { transform: translateY(-12px) rotate(var(--r)); }
+}
+@media (max-width: 767px) { .sticker { opacity: 0.5; transform: scale(0.6); } }
+@media (prefers-reduced-motion: reduce) { .sticker { animation: none; } }
+
+/* Monoline section decorations */
+.mono.deco { position: absolute; opacity: 0.85; pointer-events: none; }
+.mono.deco-light { filter: invert(1); }
+@media (max-width: 991px) { .mono.deco { display: none; } }
+
+/* Counter strip */
+.counter-inner:before { background-color: var(--off-white); border: var(--outline); }
+
+/* Team page header */
+.page-header-2026 {
+  background: var(--pastel-yellow);
+  margin-top: 80px;
+  padding: 90px 0;
+  overflow: hidden;
+  border-bottom: var(--outline);
+}
+.page-header-2026 h1, .page-header-2026 ul li, .page-header-2026 ul li a { color: var(--black-02); }
+.page-header-2026 .divider { background: var(--black-02); }
+
+/* What section sticker badge */
+.what-sticker-badge {
+  position: absolute;
+  bottom: -45px;
+  right: -30px;
+  width: 150px;
+  z-index: 3;
+  transform: rotate(8deg);
+  filter: drop-shadow(4px 4px 0 var(--black-02));
+  transition: transform 0.3s ease;
+}
+.what-sticker-badge:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+@media (max-width: 991px) {
+  .what-sticker-badge {
+    right: 10px;
+    bottom: -20px;
+    width: 110px;
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+
+/* Footer */
+.footer { background: var(--black-02); }
+.footer-devfest-logo { width: 250px; padding-bottom: 10px; filter: invert(1) hue-rotate(180deg); }
+
+html { scroll-behavior: smooth; }
+
+/* ---------- Preloader ---------- */
+.tb-preloader {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  background: #fff url('/images/preloader/FlipFlop.gif') no-repeat center;
+  z-index: 9999;
+  transition: opacity 0.3s ease;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* ---------- Floating action button ---------- */
+.fab-wrapper { position: fixed; bottom: 3rem; right: 3rem; z-index: 2000; }
+.fab-checkbox { display: none; }
+.fab {
+  position: absolute; bottom: -1rem; right: -1rem;
+  width: 4rem; height: 4rem;
+  border-radius: 50%; border-bottom-right-radius: 6px;
+  background: #126ee2; border: 1px solid #0c50a7;
+  box-shadow: 0 5px 20px #81a4f1;
+  transition: all 0.3s ease; z-index: 1; cursor: pointer;
 }
+.fab:before {
+  content: ''; position: absolute; width: 100%; height: 100%; left: 0; top: 0;
+  border-radius: 50%; background-color: rgba(255, 255, 255, 0.1);
+}
+.fab-checkbox:checked ~ .fab:before {
+  width: 90%; height: 90%; left: 5%; top: 5%; background-color: rgba(255, 255, 255, 0.2);
+}
+.fab:hover { background: #2c87e8; box-shadow: 0 5px 20px 5px #81a4f1; }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.fab-dots {
+  position: absolute; height: 8px; width: 8px; background-color: #fff; border-radius: 50%;
+  top: 50%; transform: translateX(0%) translateY(-50%) rotate(0deg);
+  opacity: 1; animation: blink 3s ease infinite; transition: all 0.3s ease;
 }
+.fab-dots-1 { left: 15px; animation-delay: 0s; }
+.fab-dots-2 { left: 50%; transform: translateX(-50%) translateY(-50%); animation-delay: 0.4s; }
+.fab-dots-3 { right: 15px; animation-delay: 0.8s; }
+.fab-checkbox:checked ~ .fab .fab-dots { height: 6px; animation: none; }
+.fab-checkbox:checked ~ .fab .fab-dots-1 {
+  width: 32px; border-radius: 10px; left: 50%; transform: translateX(-50%) translateY(-50%) rotate(45deg);
+}
+.fab-checkbox:checked ~ .fab .fab-dots-3 {
+  width: 32px; border-radius: 10px; right: 50%; transform: translateX(50%) translateY(-50%) rotate(-45deg);
+}
+@keyframes blink { 50% { opacity: 0.25; } }
+
+.fab-wheel {
+  position: absolute; bottom: 0; right: 0; width: 10rem; height: 10rem;
+  transition: all 0.3s ease; transform-origin: bottom right; transform: scale(0);
+}
+.fab-checkbox:checked ~ .fab-wheel { transform: scale(1); }
+.fab-action {
+  position: absolute; background: #0f1941; width: 3rem; height: 3rem; font-size: 20px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: #fff; box-shadow: 0 0.1rem 1rem rgba(24, 66, 154, 0.82);
+  transition: all 1s ease; opacity: 0;
+}
+.fab-action i { color: #fff; }
+.fab-checkbox:checked ~ .fab-wheel .fab-action { opacity: 1; }
+.blue-color:hover { background-color: var(--color1); }
+.red-color:hover { background-color: var(--color2); }
+.yellow-color:hover { background-color: var(--color3); }
+.green-color:hover { background-color: var(--color4); }
+.fab-wheel .fab-action-1 { right: -1rem; top: 0; }
+.fab-wheel .fab-action-2 { right: 3.4rem; top: 0.5rem; }
+.fab-wheel .fab-action-3 { left: 0.5rem; bottom: 3.4rem; }
+.fab-wheel .fab-action-4 { left: 0; bottom: -1rem; }
+
+/* ---------- Venue card gradient border ---------- */
+.module-border-wrap {
+  position: relative;
+  padding: 3px;
+  background: linear-gradient(180deg, #db4437, #4285f4 32.81%, #00ab47 66.15%, #ffba00);
+}
+.module { background: #fff; color: #000; padding: 2rem; }
+
+/* ---------- Team ---------- */
+.team-photo { border: 4px solid #000; }
