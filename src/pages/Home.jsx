@@ -4,20 +4,33 @@ import { Heading, Mono, StickerField } from '../components/Layout'
 
 function getRemaining() {
   if (!EVENT.date) return null
-  const diff = Math.max(0, EVENT.date - Date.now())
+  const target = EVENT.date instanceof Date ? EVENT.date.getTime() : new Date(EVENT.date).getTime()
+  const diff = Math.max(0, target - Date.now())
   const s = Math.floor(diff / 1000)
-  return { days: Math.floor(s / 86400), hours: Math.floor(s / 3600) % 24, minutes: Math.floor(s / 60) % 60, seconds: s % 60 }
+  return {
+    days: Math.floor(s / 86400),
+    hours: Math.floor(s / 3600) % 24,
+    minutes: Math.floor(s / 60) % 60,
+    seconds: s % 60,
+  }
 }
 
 function Countdown() {
-  const [t, setT] = useState(getRemaining)
+  const [t, setT] = useState(() => getRemaining())
+
   useEffect(() => {
     if (!EVENT.date) return
     const id = setInterval(() => setT(getRemaining()), 1000)
     return () => clearInterval(id)
   }, [])
-  const fmt = (type, v) => (t ? (type === 'day' ? v : String(v).padStart(2, '0')) : '--')
-  const cells = [['day', 'days', t?.days], ['hour', 'hours', t?.hours], ['minute', 'minutes', t?.minutes], ['second', 'seconds', t?.seconds]]
+
+  const fmt = (type, v) => (t && typeof v === 'number' ? (type === 'day' ? v : String(v).padStart(2, '0')) : '--')
+  const cells = [
+    ['day', 'days', t?.days],
+    ['hour', 'hours', t?.hours],
+    ['minute', 'minutes', t?.minutes],
+    ['second', 'seconds', t?.seconds],
+  ]
   return (
     <div className="syotimer">
       <div className="syotimer__body">
