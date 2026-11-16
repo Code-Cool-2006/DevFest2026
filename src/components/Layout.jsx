@@ -22,14 +22,20 @@ export function DecodeText({
   scrambleLength = 10,
   preserveChance = 0.28,
   tailChance = 0.16,
+  once = false,
+  replayOnHover = true,
   style,
 }) {
   const elRef = useRef(null)
   const rafRef = useRef(0)
+  const hasAnimatedRef = useRef(false)
 
   const runDecode = useCallback(() => {
     const node = elRef.current
     if (!node || typeof window === 'undefined') return
+    if (once && hasAnimatedRef.current) return
+    hasAnimatedRef.current = true
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       node.textContent = text
       return
@@ -72,7 +78,7 @@ export function DecodeText({
     }
 
     rafRef.current = requestAnimationFrame(step)
-  }, [text, duration, scrambleLength, preserveChance, tailChance])
+  }, [text, duration, scrambleLength, preserveChance, tailChance, once])
 
   useEffect(() => {
     const node = elRef.current
@@ -84,7 +90,10 @@ export function DecodeText({
         if (entry?.isIntersecting && !hasTriggered) {
           hasTriggered = true
           runDecode()
-        } else if (!entry?.isIntersecting) {
+          if (once) {
+            io.disconnect()
+          }
+        } else if (!entry?.isIntersecting && !once) {
           hasTriggered = false
         }
       },
@@ -96,13 +105,19 @@ export function DecodeText({
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       node.textContent = text
     }
-  }, [text, runDecode])
+  }, [text, runDecode, once])
+
+  const handleMouseEnter = useCallback(() => {
+    if (!replayOnHover) return
+    if (once && hasAnimatedRef.current) return
+    runDecode()
+  }, [replayOnHover, once, runDecode])
 
   return (
     <Tag
       ref={elRef}
       className={`df-decode-text ${className}`.trim()}
-      onMouseEnter={runDecode}
+      onMouseEnter={replayOnHover ? handleMouseEnter : undefined}
       data-article-heading="true"
       style={style}
     >

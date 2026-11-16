@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Fab, Footer, Navbar, Preloader } from './components/Layout'
+import { Fab, Footer, Navbar } from './components/Layout'
 import Home from './pages/Home'
 import Team from './pages/Team'
 
@@ -67,7 +67,6 @@ export default function App() {
 
   return (
     <>
-      <Preloader />
       <Fab />
       <Navbar />
       {isTeam ? <Team /> : <Home />}

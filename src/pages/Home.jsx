@@ -85,8 +85,7 @@ function Hero() {
         <div className="banner-content text-center">
           <img src="/images/icons/GDG BELGAUM Light Horizontal-Logo.png" style={{ width: 230 }} alt="GDG Belgaum" />
           <div className="hero-tagline">
-            <span className="hero-tagline__dot" />
-            <DecodeText text="BELGAUM'S LARGEST DEVELOPERS CONFERENCE" duration={520} />
+            <DecodeText text="BELGAUM'S LARGEST DEVELOPERS CONFERENCE" duration={520} once replayOnHover={false} />
           </div>
           <img src="/images/2026/devfest-braces.png" className="hero-wordmark" alt="DevFest" />
           <div className="hero-pills">
