@@ -3,14 +3,13 @@
 export const EVENT = {
   year: 2026,
   city: 'Belgaum',
-  // Countdown target (local time), e.g. new Date(2026, 10, 28, 10, 0, 0) for 28 Nov 2026, 10 AM.
-  // Leave as null until the date is announced — the countdown shows "--".
-  date: null,
-  dateLabel: 'DATE TO BE ANNOUNCED',
+  // Countdown target (local time): 26 Nov 2026, 9:00 AM.
+  date: new Date(2026, 10, 26, 9, 0, 0),
+  dateLabel: '26 NOVEMBER 2026',
   venueShort: 'KLS Gogte Institute of Technology, Belagavi',
   venueMapHero: 'https://goo.gl/maps/DqDGRCLnYi6BVxeE8',
   venueMap: 'https://maps.app.goo.gl/fScSNy5N3ZgkLqPj7',
-  registerUrl: 'https://forms.gle/BZuME4qBq3nxpaCW6',
+  registerUrl: 'https://konfhub.com/google-developer-group-belgaum-devfest-2026',
   eventPage: 'https://gdg.community.dev/gdg-belgaum/', // swap for the 2026 event page once published
 }
 
