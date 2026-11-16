@@ -51,7 +51,29 @@ h1, h2, h3, h4, h5, h6 { color: var(--black-02); }
   padding: 70px 0 110px;
   overflow: hidden;
 }
-.hero-tagline { margin-top: 18px; font-weight: 700; letter-spacing: 0.08em; color: #444; font-size: 16px; }
+.hero-tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 6px 18px;
+  background: #fff;
+  border: 2.5px solid var(--black-02);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--black-02);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--black-02);
+  font-size: 13px;
+}
+.hero-tagline__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color4);
+  box-shadow: 0 0 0 3px rgba(52, 168, 83, 0.25);
+  animation: dfLedPulse 2s ease-in-out infinite;
+}
 .hero-wordmark { width: min(560px, 88vw); margin: 22px auto 0; display: block; }
 .hero-pills { display: flex; justify-content: center; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
 .pill {
@@ -64,14 +86,40 @@ h1, h2, h3, h4, h5, h6 { color: var(--black-02); }
   color: var(--black-02);
   background: #fff;
   line-height: 1.3;
+  box-shadow: 4px 4px 0 var(--black-02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pill:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--black-02);
 }
 .pill-location { min-width: min(380px, 70vw); }
 .pill-year { background: var(--color3); }
-.section-banner .banner-content h1.hero-title { font-size: 40px; margin: 34px 0 18px; letter-spacing: -0.02em; }
+.section-banner .banner-content h1.hero-title {
+  font-size: 38px;
+  margin: 30px 0 22px;
+  letter-spacing: -0.02em;
+}
+.hero-title__plate {
+  display: inline-block;
+  padding: 10px 26px;
+  background: #ffffff;
+  border: var(--outline);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--black-02);
+  color: var(--black-02);
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease;
+  cursor: pointer;
+}
+.hero-title__plate:hover {
+  transform: translate(-2px, -3px) rotate(-0.6deg);
+  box-shadow: 9px 9px 0 var(--color1), 9px 9px 0 3px var(--black-02);
+}
 .hero-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; font-weight: 700; margin-bottom: 30px; font-size: 15px; }
 .hero-meta i { color: var(--color2); font-size: 20px; vertical-align: -2px; margin-right: 4px; }
 @media (max-width: 767px) {
-  .section-banner .banner-content h1.hero-title { font-size: 28px; }
+  .section-banner .banner-content h1.hero-title { font-size: 24px; }
+  .hero-title__plate { padding: 8px 16px; border-radius: 14px; }
   .pill { font-size: 20px; }
 }
 
@@ -97,6 +145,39 @@ h1, h2, h3, h4, h5, h6 { color: var(--black-02); }
 
 /* Counter strip */
 .counter-inner:before { background-color: var(--off-white); border: var(--outline); }
+.counter-stat__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+  background: var(--black-02);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+.counter-stat__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color3);
+  box-shadow: 0 0 8px var(--color3);
+  animation: dfLedPulse 1.8s ease-in-out infinite;
+}
+.counter-stat__title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  line-height: 1.15;
+}
+.counter-stat__sub {
+  font-size: 20px;
+  font-weight: 500;
+  color: #555;
+}
 
 /* Team page header */
 .page-header-2026 {
@@ -217,3 +298,439 @@ html { scroll-behavior: smooth; }
 
 /* ---------- Team ---------- */
 .team-photo { border: 4px solid #000; }
+
+/* ---------- ThreeUI 3D Section Backdrops ---------- */
+.threeui-section-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: auto;
+}
+/* Override @designcodeio/threeui default #030304 solid dark background on transparent WebGL canvases */
+.threeui-section-bg .threeui-background {
+  background: transparent !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+.threeui-section-bg canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+.threeui-section-bg--hero {
+  opacity: 0.75;
+  filter: saturate(1.4) contrast(1.1) brightness(0.72);
+  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 48%, #000 45%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 80% at 50% 48%, #000 45%, transparent 100%);
+}
+.threeui-section-bg--schedule {
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.threeui-section-bg--speakers {
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+.threeui-section-bg--team {
+  opacity: 0.72;
+  filter: saturate(1.5) brightness(0.68);
+  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, #000 45%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 80% at 50% 50%, #000 45%, transparent 100%);
+}
+.threeui-section-bg--footer {
+  opacity: 0.48;
+  mix-blend-mode: screen;
+}
+.sticker-field {
+  z-index: 1;
+}
+
+/* ---------- Interactive 3D Kinetic Section Headings (.df-heading) ---------- */
+@keyframes dfLedPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.65; }
+}
+
+@keyframes dfSpectrumSpark {
+  0% { left: 0%; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: calc(100% - 28px); opacity: 0; }
+}
+
+@keyframes dfWatermarkFloat {
+  0%, 100% { transform: translate3d(0, 0, -10px); }
+  50% { transform: translate3d(6px, -5px, -10px); }
+}
+
+.df-heading {
+  --rx: 0deg;
+  --ry: 0deg;
+  --glow-x: 25%;
+  --glow-y: 50%;
+  --heading-accent: var(--color1);
+  position: relative;
+  padding: 22px 28px 24px;
+  margin-bottom: 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--outline);
+  box-shadow: 7px 7px 0 var(--black-02);
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease, background 0.22s ease;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.df-heading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    360px circle at var(--glow-x) var(--glow-y),
+    rgba(66, 133, 244, 0.13),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.df-heading:hover {
+  box-shadow: 10px 10px 0 var(--heading-accent), 10px 10px 0 3px var(--black-02);
+}
+
+.df-heading--light {
+  background: rgba(16, 28, 62, 0.82);
+  border-color: #ffffff;
+  box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.55);
+}
+
+.df-heading--light::before {
+  background: radial-gradient(
+    380px circle at var(--glow-x) var(--glow-y),
+    rgba(255, 186, 0, 0.18),
+    transparent 70%
+  );
+}
+
+.df-heading--light:hover {
+  box-shadow: 10px 10px 0 #ffba00, 10px 10px 0 3px #ffffff;
+}
+
+.df-heading--center {
+  text-align: center;
+}
+
+/* Subtle kinetic background watermark inside the card */
+.df-heading__watermark {
+  position: absolute;
+  right: 18px;
+  top: -10px;
+  font-size: clamp(64px, 9vw, 108px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--heading-accent);
+  opacity: 0.16;
+  pointer-events: none;
+  user-select: none;
+  animation: dfWatermarkFloat 6s ease-in-out infinite;
+  z-index: 0;
+}
+
+.df-heading--light .df-heading__watermark {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.55);
+  opacity: 0.14;
+}
+
+/* Eyebrow row: Neo-Brutalist pill badge + 4-color telemetry dots */
+.df-heading__eyebrow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.df-heading--center .df-heading__eyebrow {
+  justify-content: center;
+}
+
+.df-heading__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--black-02);
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 var(--heading-accent);
+}
+
+.df-heading--light .df-heading__pill {
+  background: #ffffff;
+  color: var(--black-02);
+  box-shadow: 3px 3px 0 #ffba00;
+}
+
+.df-heading__led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--heading-accent);
+  box-shadow: 0 0 8px var(--heading-accent);
+  animation: dfLedPulse 1.8s ease-in-out infinite;
+}
+
+.df-heading__index {
+  color: #ffba00;
+  font-family: monospace;
+  font-weight: 800;
+}
+
+.df-heading--light .df-heading__index {
+  color: var(--color1);
+}
+
+.df-heading__index::after {
+  content: '//';
+  margin-left: 6px;
+  opacity: 0.5;
+}
+
+.df-heading__brackets {
+  width: 20px;
+  height: 12px;
+  margin-left: 2px;
+  transition: transform 0.25s ease;
+}
+
+.df-heading:hover .df-heading__brackets {
+  transform: scale(1.18) rotate(-4deg);
+}
+
+.df-heading__rail {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.df-heading__rail i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  border: 1.5px solid var(--black-02);
+}
+.df-heading__rail i:nth-child(1) { background: var(--color1); }
+.df-heading__rail i:nth-child(2) { background: var(--color2); }
+.df-heading__rail i:nth-child(3) { background: var(--color3); }
+.df-heading__rail i:nth-child(4) { background: var(--color4); }
+
+/* Main kinetic title */
+.df-heading__title {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 12px;
+  font-size: clamp(26px, 3.4vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--black-02);
+}
+
+.df-heading__title::before {
+  display: none !important;
+}
+
+.df-heading--light .df-heading__title {
+  color: #ffffff;
+}
+
+.df-decode-text {
+  display: inline;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 4-color Google Developer spectrum bar + orbiting spark */
+.df-heading__spectrum {
+  position: relative;
+  z-index: 1;
+  width: min(260px, 75%);
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(30, 30, 30, 0.12);
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.df-heading--center .df-heading__spectrum {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.df-heading__spectrum-bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color1) 0%,
+    var(--color1) 25%,
+    var(--color2) 25%,
+    var(--color2) 50%,
+    var(--color3) 50%,
+    var(--color3) 75%,
+    var(--color4) 75%,
+    var(--color4) 100%
+  );
+  border-radius: 999px;
+}
+
+.df-heading__spectrum-spark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  animation: dfSpectrumSpark 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Subtitle description */
+.df-heading__desc {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--heading-accent);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #3a3a3a;
+  font-weight: 500;
+}
+
+.df-heading--light .df-heading__desc {
+  color: rgba(255, 255, 255, 0.88);
+  border-left-color: #ffba00;
+}
+
+/* About section body card */
+.df-about-body {
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.92);
+  border: var(--outline);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 var(--black-02);
+}
+
+/* ---------- Interactive 3D Sub-Heading Ribbon (.df-subheading) ---------- */
+.df-subheading {
+  --sub-accent: var(--color1);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 14px 22px;
+  background: #ffffff;
+  border: var(--outline);
+  border-radius: 18px;
+  box-shadow: 5px 5px 0 var(--black-02);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+}
+
+.df-subheading:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--sub-accent), 8px 8px 0 3px var(--black-02);
+}
+
+.df-subheading__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--black-02);
+  color: #fff;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.df-subheading__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sub-accent);
+  box-shadow: 0 0 6px var(--sub-accent);
+}
+
+.df-subheading__title {
+  margin: 0;
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 700;
+  color: var(--black-02);
+  letter-spacing: -0.01em;
+}
+
+.df-subheading__line {
+  flex: 1;
+  min-width: 40px;
+  height: 3px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--sub-accent) 0px,
+    var(--sub-accent) 10px,
+    transparent 10px,
+    transparent 16px
+  );
+  opacity: 0.65;
+}
+
+.df-subheading__count {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--off-white);
+  border: 2px solid var(--black-02);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--black-02);
+}
+
+@media (max-width: 767px) {
+  .df-heading {
+    padding: 18px 18px 20px;
+    border-radius: 18px;
+  }
+  .df-heading__watermark {
+    font-size: 54px;
+    top: -4px;
+  }
+  .df-subheading__line {
+    display: none;
+  }
+}

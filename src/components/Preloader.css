@@ -1,0 +1,1060 @@
+/* ==========================================================================
+   DevFest Belgaum 2026 — 3D Motherboard, ThreeUI Shader & Reactor Preloader
+   Scoped under .df-preloader-* to avoid any collision with Bootstrap / site CSS
+   ========================================================================== */
+
+.df-preloader-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 9999;
+  background: #03050b;
+  color: #f1f5f9;
+  font-family: 'Google Sans', 'Product Sans', system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  perspective: 1300px;
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s;
+}
+
+.df-preloader-root.is-warping {
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* ---------- Layer 1: ThreeUI WebGL Background Shaders ---------- */
+.df-preloader-threeui-bg {
+  position: absolute;
+  inset: -4%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.df-preloader-stream-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.34;
+  mix-blend-mode: screen;
+}
+
+.df-preloader-warp-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+  transition: opacity 0.35s ease;
+}
+
+/* Vignette & PCB solder-mask tint over WebGL shaders */
+.df-preloader-substrate-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(5, 10, 24, 0.35) 0%, rgba(3, 6, 15, 0.86) 68%, rgba(2, 4, 10, 0.97) 100%),
+    linear-gradient(135deg, rgba(66, 133, 244, 0.06) 0%, transparent 45%, rgba(234, 67, 53, 0.07) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ---------- Layer 2: 3D Tilted Motherboard Stage ---------- */
+.df-preloader-stage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1), filter 0.72s ease;
+}
+
+.df-preloader-root.is-warping .df-preloader-stage {
+  transform: translate3d(0, 0, 520px) scale(2.65) !important;
+  filter: brightness(2.1) contrast(1.15) blur(4px);
+}
+
+/* White-hot optical bloom flash during 100% warp exit */
+.df-preloader-warp-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(56, 189, 248, 0.55) 42%, transparent 75%);
+  opacity: 0;
+  transition: opacity 0.55s ease-out;
+}
+
+.df-preloader-root.is-warping .df-preloader-warp-flash {
+  opacity: 1;
+}
+
+/* ---------- Copper-Etched Silkscreen Heritage Stamps ---------- */
+.df-preloader-silkscreen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.df-silk-stamp {
+  position: absolute;
+  color: rgba(148, 163, 184, 0.12);
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.06));
+}
+
+.df-silk-stamp--tl {
+  top: 18px;
+  left: 22px;
+  width: 185px;
+  height: 185px;
+  color: rgba(96, 165, 250, 0.13);
+}
+
+.df-silk-stamp--bl {
+  bottom: 64px;
+  left: 22px;
+  width: 200px;
+  height: 200px;
+  color: rgba(251, 188, 4, 0.11);
+}
+
+.df-silk-stamp--tr {
+  top: 56px;
+  right: 26px;
+  width: 190px;
+  height: 175px;
+  color: rgba(52, 211, 153, 0.11);
+}
+
+.df-silk-stamp--br {
+  bottom: 72px;
+  right: 28px;
+  text-align: right;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.df-silk-graffiti {
+  font-size: 34px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.2px rgba(234, 67, 53, 0.36);
+  text-shadow: 0 0 18px rgba(234, 67, 53, 0.22);
+  transform: rotate(-6deg);
+}
+
+.df-silk-rev {
+  margin-top: 6px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: rgba(148, 163, 184, 0.32);
+  text-transform: uppercase;
+}
+
+/* ---------- Layer 3: Full-Stage HTML5 Canvas (PCB Buses & Photon Packets) ---------- */
+.df-preloader-pcb-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* ---------- Layer 4: Surface-Mounted QFP IC Die Nodes ---------- */
+.df-preloader-nodes-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.df-ic-socket {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  background: linear-gradient(165deg, rgba(13, 19, 36, 0.94) 0%, rgba(7, 10, 20, 0.97) 100%);
+  border: 1.5px solid rgba(51, 65, 85, 0.75);
+  border-radius: 12px;
+  padding: 7px 11px 7px 8px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition:
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    opacity 0.28s ease;
+  min-width: 158px;
+}
+
+/* Metallic QFP IC Solder Leads on Top & Bottom Edges */
+.df-ic-socket::before,
+.df-ic-socket::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  height: 4px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.65) 0px,
+    rgba(148, 163, 184, 0.65) 3px,
+    transparent 3px,
+    transparent 9px
+  );
+  pointer-events: none;
+}
+
+.df-ic-socket::before {
+  top: -5px;
+}
+
+.df-ic-socket::after {
+  bottom: -5px;
+}
+
+.df-ic-socket.is-locked {
+  opacity: 0.52;
+}
+
+.df-ic-socket.is-unlocked {
+  opacity: 1;
+  border-color: var(--node-color, #4285f4);
+  box-shadow:
+    0 0 22px var(--node-glow, rgba(66, 133, 244, 0.32)),
+    0 10px 26px rgba(0, 0, 0, 0.75),
+    inset 0 0 12px var(--node-glow-soft, rgba(66, 133, 244, 0.14));
+}
+
+.df-ic-socket:hover,
+.df-ic-socket.is-inspected {
+  transform: translate(-50%, -50%) scale(1.07) translateZ(18px);
+  z-index: 25;
+  border-color: #ffffff;
+  box-shadow:
+    0 0 30px var(--node-glow, rgba(66, 133, 244, 0.55)),
+    0 14px 32px rgba(0, 0, 0, 0.85);
+}
+
+.df-ic-die-window {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: radial-gradient(circle at 30% 30%, #162038 0%, #070a14 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.85);
+}
+
+.df-ic-led {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #334155;
+  border: 1.5px solid #060913;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.df-ic-socket.is-unlocked .df-ic-led {
+  background: var(--node-color, #34a853);
+  box-shadow: 0 0 8px var(--node-color, #34a853);
+}
+
+.df-ic-meta {
+  text-align: left;
+  min-width: 0;
+}
+
+.df-ic-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.df-ic-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.df-ic-pin-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--node-color, #94a3b8);
+}
+
+.df-ic-sub {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9.5px;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* ---------- Layer 5: Central Machined Google 4-Color Reactor Core ---------- */
+.df-reactor-center-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateZ(26px);
+  width: 440px;
+  height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  pointer-events: auto;
+}
+
+/* Circular Glass Lens Aperture holding ThreeUI OrbitalSphereBackground */
+.df-reactor-lens-cavity {
+  position: absolute;
+  width: 344px;
+  height: 344px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 42%, rgba(16, 24, 48, 0.92) 0%, rgba(5, 8, 18, 0.98) 78%);
+  box-shadow:
+    inset 0 0 42px rgba(0, 0, 0, 0.95),
+    inset 0 0 18px rgba(66, 133, 244, 0.22),
+    0 0 60px rgba(0, 0, 0, 0.85);
+  z-index: 1;
+}
+
+.df-reactor-threeui-orb {
+  position: absolute;
+  inset: -18%;
+  width: 136%;
+  height: 136%;
+  opacity: 0.58;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Subtle glass specular highlight across the reactor lens */
+.df-reactor-lens-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, transparent 42%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.df-reactor-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes dfSpinCw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes dfSpinCcw {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.df-ring-spin-cw {
+  transform-origin: 220px 220px;
+  animation: dfSpinCw 38s linear infinite;
+}
+
+.df-ring-spin-ccw {
+  transform-origin: 220px 220px;
+  animation: dfSpinCcw 26s linear infinite;
+}
+
+/* Central Core Content Typography & Lockup */
+.df-reactor-content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 310px;
+  padding: 12px;
+}
+
+.df-core-gdg-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.df-core-gdg-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: 0.03em;
+}
+
+.df-core-city-pill {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(251, 188, 4, 0.16);
+  border: 1px solid rgba(251, 188, 4, 0.45);
+  color: #fde047;
+}
+
+.df-core-title {
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  margin: 2px 0 4px;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.9);
+}
+
+.df-core-theme-caption {
+  font-size: 10.5px;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.df-core-pillars {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  color: #ffffff;
+  margin-top: 2px;
+  text-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+}
+
+.df-core-pillars .dot {
+  color: #38bdf8;
+  margin: 0 3px;
+}
+
+.df-core-era-sub {
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-top: 3px;
+}
+
+/* Progress Bar & Digital Readout inside Reactor Core */
+.df-core-telemetry-box {
+  margin-top: 12px;
+  width: 226px;
+}
+
+.df-core-readout-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+
+.df-core-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #38bdf8;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.df-core-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+.df-core-pct {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+
+.df-core-bar-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 1px;
+  overflow: hidden;
+}
+
+.df-core-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ea4335 0%, #fbbc04 33%, #34a853 66%, #4285f4 100%);
+  box-shadow: 0 0 12px rgba(66, 133, 244, 0.7);
+  transition: width 0.08s linear;
+}
+
+.df-core-log-line {
+  margin-top: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9.5px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Layer 6: Minimal Hardware HUD Controls (Top & Bottom) ---------- */
+.df-hud-top {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  pointer-events: none;
+}
+
+.df-hud-brand-chip {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgba(9, 13, 26, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.df-hud-actions {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.df-keycap-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(24, 34, 56, 0.92) 0%, rgba(10, 15, 28, 0.96) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.df-keycap-btn:hover {
+  transform: translateY(-1px);
+  border-color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+}
+
+.df-keycap-kbd {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 9.5px;
+  color: #38bdf8;
+}
+
+/* Compact wrapper for ThreeUI CircleButtons ignition trigger */
+.df-threeui-ignition-wrap {
+  transform: scale(0.54);
+  transform-origin: center;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bottom Die-Telemetry Strip */
+.df-hud-bottom {
+  position: relative;
+  z-index: 30;
+  padding: 10px 24px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.df-telemetry-strip {
+  pointer-events: auto;
+  width: min(860px, 94vw);
+  padding: 9px 16px;
+  border-radius: 14px;
+  background: rgba(8, 12, 24, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+}
+
+.df-telemetry-node-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.df-telemetry-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.df-telemetry-track {
+  font-size: 12px;
+  color: #e2e8f0;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.df-telemetry-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: #38bdf8;
+  background: rgba(2, 6, 16, 0.85);
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.df-ic-mobile-label {
+  display: none;
+}
+
+/* ---------- Responsive Adaptations (< 1024px) ---------- */
+@media (max-width: 1023px) {
+  .df-ic-socket {
+    min-width: 126px;
+    padding: 5px 8px;
+  }
+  .df-ic-die-window {
+    width: 30px;
+    height: 30px;
+  }
+  .df-ic-sub {
+    display: none;
+  }
+  .df-reactor-center-wrap {
+    width: 340px;
+    height: 340px;
+  }
+  .df-reactor-lens-cavity {
+    width: 266px;
+    height: 266px;
+  }
+  .df-reactor-content {
+    width: 246px;
+  }
+  .df-core-title {
+    font-size: 32px;
+  }
+  .df-core-pillars {
+    font-size: 14px;
+  }
+  .df-core-telemetry-box {
+    width: 190px;
+  }
+}
+
+/* ---------- Dedicated Mobile 3D Holographic Agentic Launch Deck (< 768px) ---------- */
+.df-mobile-stage {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px 16px;
+}
+
+.df-mobile-card {
+  width: min(370px, 100%);
+  background: linear-gradient(165deg, rgba(12, 18, 36, 0.88) 0%, rgba(5, 8, 18, 0.95) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 26px;
+  padding: 16px 16px 15px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.85),
+    0 0 36px rgba(66, 133, 244, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+}
+
+.df-mobile-card__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.df-mobile-card__gdg {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: -0.01em;
+}
+
+/* 3D Orbital Sphere Dial inside Mobile Card */
+.df-mobile-orb-wrap {
+  position: relative;
+  width: 146px;
+  height: 146px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px 0;
+}
+
+.df-mobile-orb-lens {
+  position: absolute;
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, rgba(20, 32, 64, 0.92) 0%, rgba(4, 7, 16, 0.98) 80%);
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.9),
+    0 0 28px rgba(66, 133, 244, 0.22);
+}
+
+.df-mobile-orb-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.df-mobile-orb-center {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.df-mobile-orb-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(7, 11, 24, 0.92);
+  border: 1.5px solid #4285f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.df-mobile-orb-pct {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 18px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.df-mobile-orb-status {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #38bdf8;
+  margin-top: 2px;
+}
+
+/* Mobile Brand Lockup */
+.df-mobile-brand {
+  text-align: center;
+}
+
+.df-mobile-title {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  margin: 0;
+}
+
+.df-mobile-pillars {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+.df-mobile-pillars .dot {
+  color: #38bdf8;
+  margin: 0 3px;
+}
+
+.df-mobile-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Active Ecosystem Spotlight Pill inside Mobile Card */
+.df-mobile-spotlight {
+  width: 100%;
+  background: rgba(6, 10, 22, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 14px;
+  padding: 9px 12px;
+  transition: border-color 0.25s ease;
+}
+
+.df-mobile-spotlight__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.df-mobile-spotlight__badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.df-mobile-spotlight__sync {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9px;
+  color: #94a3b8;
+  letter-spacing: 0.06em;
+}
+
+.df-mobile-spotlight__track {
+  font-size: 11px;
+  color: #e2e8f0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 9-Chip Ecosystem Dock */
+.df-mobile-dock {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 5px;
+}
+
+.df-mobile-chip {
+  aspect-ratio: 1;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(71, 85, 105, 0.45);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.42;
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.df-mobile-chip svg {
+  width: 16px;
+  height: 16px;
+}
+
+.df-mobile-chip.is-unlocked {
+  opacity: 0.92;
+  border-color: var(--chip-color, #4285f4);
+}
+
+.df-mobile-chip.is-active {
+  opacity: 1;
+  transform: translateY(-2px) scale(1.08);
+  border-color: #ffffff;
+  box-shadow: 0 0 12px var(--chip-glow, rgba(66, 133, 244, 0.5));
+}
+
+.df-mobile-progress-wrap {
+  width: 100%;
+}
+
+.df-mobile-log {
+  margin-top: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9.5px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.df-mobile-enter-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 50%, #0284c7 100%);
+  border: 1px solid rgba(125, 211, 252, 0.45);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.df-mobile-enter-btn:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 767px) {
+  .df-hud-hide-mobile {
+    display: none !important;
+  }
+
+  .df-hud-top {
+    padding: 12px 14px 4px;
+    gap: 8px;
+  }
+
+  .df-hud-brand-chip {
+    padding: 5px 11px;
+    font-size: 10.5px;
+    gap: 7px;
+  }
+
+  .df-hud-actions {
+    gap: 6px;
+  }
+
+  .df-keycap-btn {
+    padding: 5px 10px;
+    font-size: 10.5px;
+    border-radius: 8px;
+  }
+
+  .df-threeui-ignition-wrap {
+    transform: scale(0.44);
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (max-width: 767px) and (max-height: 670px) {
+  .df-mobile-orb-wrap {
+    width: 120px;
+    height: 120px;
+  }
+  .df-mobile-orb-lens {
+    width: 96px;
+    height: 96px;
+  }
+  .df-mobile-title {
+    font-size: 26px;
+  }
+  .df-mobile-card {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+}
+
