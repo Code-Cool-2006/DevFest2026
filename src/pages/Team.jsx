@@ -81,15 +81,41 @@ export default function Team() {
                   />
                 </div>
               </div>
-              <div className="row">
+              <div className="row justify-content-center">
                 {group.members.map((m, idx) => (
-                  <div className="col-lg-3 col-sm-6" key={m.name || idx}>
-                    <div className="speaker-block style-2 mb-5">
-                      <div className="img-block">
-                        <img src={m.img || PLACEHOLDER_IMG} alt={m.name} className="img-fluid rounded-circle team-photo" style={{ width: 160, height: 160, objectFit: 'cover', objectPosition: m.objectPosition || 'center top' }} />
+                  <div className="col-lg-3 col-sm-6 mb-4 d-flex" key={m.name || idx}>
+                    <div
+                      className="team-card-2026 w-100 d-flex flex-column align-items-center text-center p-4 mb-3"
+                      style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: 20,
+                        border: 'var(--outline)',
+                        boxShadow: '5px 5px 0 var(--black-02)',
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                      }}
+                    >
+                      <div className="img-block mb-3">
+                        <img
+                          src={m.img || PLACEHOLDER_IMG}
+                          alt={m.name}
+                          className="rounded-circle team-photo"
+                          style={{
+                            objectPosition: m.objectPosition || 'center top',
+                          }}
+                          onError={(e) => {
+                            e.currentTarget.src = PLACEHOLDER_IMG
+                          }}
+                        />
                       </div>
-                      <div className="speaker-info text-center">
-                        <h4 className="mb-0 mt-3">{m.name}</h4>
+                      <div className="team-info d-flex flex-column align-items-center justify-content-center flex-grow-1 w-100 mt-2">
+                        <h4 className="team-name mb-1" style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--black-02)' }}>
+                          {m.name}
+                        </h4>
+                        {m.role && (
+                          <p className="team-role mb-0" style={{ fontSize: '0.85rem', color: 'var(--color1)', fontWeight: 700 }}>
+                            {m.role}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

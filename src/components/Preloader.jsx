@@ -332,6 +332,55 @@ function computeChamferedTrace(x0, y0, cx, cy, coreR, side) {
   ]
 }
 
+const PRELOADER_CACHE_KEY = 'devfest_preloader_seen_24h'
+const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000
+
+const BACKGROUND_CACHE_ASSETS = [
+  '/images/speaker/adit-lal.jpg',
+  '/images/speaker/aishwarya-raikar.jpg',
+  '/images/speaker/anoop-betageri.jpg',
+  '/images/speaker/geeta-kakrani.jpg',
+  '/images/speaker/prakhar-gandhi.jpg',
+  '/images/speaker/rivu-chakraborty.jpg',
+  '/images/speaker/sayed-imran.jpg',
+  '/images/speaker/yash-thakare.jpg',
+  '/images/Team/CodeChallenge_Judge.jpeg',
+  '/images/Team/CodeChallenge_Judge 2.png',
+  '/images/about/what/devfest2024.jpg',
+  '/images/about/what/devfest2024_2.jpg',
+  '/images/about/Schedule/registration.png',
+  '/images/about/Schedule/opening.png',
+  '/images/about/Schedule/techactivity.png',
+  '/images/about/Schedule/prize.jpg',
+  '/images/about/Schedule/pizza.png',
+  '/images/about/Schedule/cultural.png',
+  '/images/icons/GDG BELGAUM Dark Horizontal-Logo.png',
+  '/images/2026/devfest-braces.png',
+]
+
+function performBackgroundCaching() {
+  if (typeof window === 'undefined') return
+  try {
+    for (const url of BACKGROUND_CACHE_ASSETS) {
+      const img = new Image()
+      img.src = url
+    }
+    if ('caches' in window) {
+      window.caches.open('devfest2026-cache-24h').then((cache) => {
+        BACKGROUND_CACHE_ASSETS.forEach((url) => {
+          fetch(url, { cache: 'force-cache' })
+            .then((res) => {
+              if (res.ok) cache.put(url, res)
+            })
+            .catch(() => {})
+        })
+      }).catch(() => {})
+    }
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 function shouldSkipPreloaderOnInit() {
   if (typeof window === 'undefined') return false
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
@@ -341,10 +390,32 @@ function shouldSkipPreloaderOnInit() {
       sessionStorage.removeItem('devfest_skip_next_preloader')
       return true
     }
+    const raw = localStorage.getItem(PRELOADER_CACHE_KEY)
+    if (raw) {
+      const data = JSON.parse(raw)
+      if (data && data.expiresAt && Date.now() < data.expiresAt) {
+        return true
+      }
+      localStorage.removeItem(PRELOADER_CACHE_KEY)
+    }
   } catch {
     // Ignore storage access errors
   }
   return false
+}
+
+function recordPreloaderCached() {
+  try {
+    localStorage.setItem(
+      PRELOADER_CACHE_KEY,
+      JSON.stringify({
+        cachedAt: Date.now(),
+        expiresAt: Date.now() + TWENTY_FOUR_HOURS_MS,
+      })
+    )
+  } catch {
+    // Ignore storage errors
+  }
 }
 
 function samplePolyline(pts, t) {
@@ -429,15 +500,35 @@ export function Preloader() {
     progressRef.current = 100
     setProgress(100)
     setIsWarping(true)
+    recordPreloaderCached()
     playTone(880, 0.14)
     setTimeout(() => {
       setHidden(true)
-    }, 680)
+    }, 550)
   }, [playTone])
+
+  // Start background asset caching & watchdog to ensure no sticking on refresh
+  useEffect(() => {
+    if (hidden) return undefined
+
+    performBackgroundCaching()
+    recordPreloaderCached()
+
+    const watchdog = setTimeout(() => {
+      triggerWarpExit()
+    }, 2800)
+
+    return () => clearTimeout(watchdog)
+  }, [hidden, triggerWarpExit])
 
   // Listen for custom 'devfest:replay-preloader' event from Footer/FAB and Escape key
   useEffect(() => {
     const onReplay = () => {
+      try {
+        localStorage.removeItem(PRELOADER_CACHE_KEY)
+      } catch {
+        // Ignore storage access errors
+      }
       isWarpingRef.current = false
       progressRef.current = 0
       setProgress(0)

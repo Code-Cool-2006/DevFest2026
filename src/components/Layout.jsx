@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { LumenCta } from '@designcodeio/threeui/components/LumenCta'
 import { RibbonFieldBackground } from '@designcodeio/threeui/components/RibbonFieldBackground'
 import { EVENT, NAV_LINKS } from '../data/content'
 import { Preloader, ShaderSafeBoundary } from './Preloader'
@@ -223,19 +222,7 @@ export function Footer() {
           </div>
         </div>
         <div className="row">
-          <div className="col-lg-12 text-center mt-5">
-            <div className="mb-3 d-flex justify-content-center">
-              <ShaderSafeBoundary>
-                <LumenCta
-                  variant="ghost"
-                  mode="dark"
-                  label="↻ Replay Agentic Intro"
-                  ring
-                  hue={210}
-                  onClick={() => window.dispatchEvent(new CustomEvent('devfest:replay-preloader'))}
-                />
-              </ShaderSafeBoundary>
-            </div>
+          <div className="col-lg-12 text-center mt-4">
             <p className="copy border-top pt-4 text-white-50 mb-0">
               Designed with ❤️ by Tech team{' '}
               <a style={link} href="https://gdg.community.dev/gdg-belgaum/" target="_blank" rel="noreferrer">GDG BELGAUM</a>

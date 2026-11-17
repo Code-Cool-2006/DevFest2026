@@ -296,8 +296,288 @@ html { scroll-behavior: smooth; }
 }
 .module { background: #fff; color: #000; padding: 2rem; }
 
-/* ---------- Team ---------- */
-.team-photo { border: 4px solid #000; }
+/* ---------- Team & Speaker Cards ---------- */
+.team-photo {
+  width: 160px;
+  height: 160px;
+  border: 4px solid var(--black-02);
+  box-shadow: 4px 4px 0 var(--black-02);
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+
+.speaker-card-photo {
+  width: 175px;
+  height: 175px;
+  object-fit: cover;
+  border: 4px solid var(--black-02);
+  box-shadow: 4px 4px 0 var(--black-02);
+  display: block;
+  margin: 0 auto;
+  transition: width 0.2s ease, height 0.2s ease;
+}
+
+.speaker-block-2026:hover,
+.team-card-2026:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--black-02) !important;
+}
+
+/* ---------- Schedule Item Responsive Styles ---------- */
+.schedule-item {
+  box-shadow: 6px 6px 0 var(--black-02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-width 0.2s ease;
+}
+
+.time-table .schedule-item .time {
+  flex: 0 0 170px !important;
+  max-width: 170px !important;
+}
+
+.time-table .schedule-item .content {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  padding-right: 20px !important;
+}
+
+.time-table .schedule-item .content-img {
+  flex: 0 0 auto !important;
+  max-width: 520px !important;
+  min-width: unset !important;
+}
+
+/* Force override of style.css 100px rule on avatars */
+.time-table .content-img img.schedule-avatar-multi {
+  width: 50px !important;
+  height: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 3px solid var(--black-02) !important;
+  box-shadow: 2px 2px 0 var(--black-02) !important;
+  display: block !important;
+}
+
+.time-table .content-img img.schedule-avatar-duo {
+  width: 76px !important;
+  height: 76px !important;
+  min-width: 76px !important;
+  max-width: 76px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 3.5px solid var(--black-02) !important;
+  box-shadow: 3px 3px 0 var(--black-02) !important;
+  display: block !important;
+}
+
+.time-table .content-img img.schedule-speaker-photo {
+  width: 95px !important;
+  height: 95px !important;
+  min-width: 95px !important;
+  max-width: 95px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 3.5px solid var(--black-02) !important;
+  box-shadow: 3px 3px 0 var(--black-02) !important;
+  display: block !important;
+}
+
+.schedule-multi-avatars {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.schedule-multi-avatars--duo {
+  flex-wrap: nowrap !important;
+  gap: 16px !important;
+}
+
+.schedule-multi-avatars--keynotes {
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+}
+
+.schedule-avatar-item {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  flex-shrink: 0 !important;
+}
+
+.schedule-avatar-caption {
+  display: block;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  color: var(--black-02) !important;
+  margin-top: 4px !important;
+  white-space: nowrap !important;
+}
+
+/* ---------- Mobile Responsive Overrides (Photo sizes up, text balanced) ---------- */
+@media (max-width: 767px) {
+  /* Schedule timeline items */
+  .time-table .schedule-item {
+    display: block !important;
+    border-width: 12px !important;
+    border-radius: 26px !important;
+    padding: 1.15rem 1rem !important;
+  }
+
+  .time-table .schedule-item .content-img {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-top: 14px !important;
+  }
+
+  .schedule-multi-avatars {
+    justify-content: center !important;
+  }
+
+  .schedule-multi-avatars--duo {
+    flex-wrap: nowrap !important;
+    gap: 16px !important;
+  }
+
+  .schedule-multi-avatars--keynotes {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    justify-content: center !important;
+    max-width: 290px;
+    margin: 0 auto;
+  }
+
+  .schedule-item .time {
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .schedule-item .content h3 {
+    font-size: 1.12rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .schedule-item .content .schedule-speaker-label {
+    font-size: 0.88rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  .schedule-item .content p {
+    font-size: 0.84rem !important;
+    line-height: 1.45 !important;
+    color: #444 !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Schedule photos noticeably larger on mobile */
+  .schedule-speaker-photo {
+    width: 128px !important;
+    height: 128px !important;
+    border-width: 4px !important;
+    box-shadow: 4px 4px 0 var(--black-02) !important;
+  }
+
+  .schedule-avatar-duo {
+    width: 98px !important;
+    height: 98px !important;
+    border-width: 3.5px !important;
+    box-shadow: 3px 3px 0 var(--black-02) !important;
+  }
+
+  .schedule-avatar-multi {
+    width: 66px !important;
+    height: 66px !important;
+    border-width: 3px !important;
+    box-shadow: 2.5px 2.5px 0 var(--black-02) !important;
+  }
+
+  .schedule-avatar-caption {
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+  }
+
+  .schedule-icon {
+    max-height: 95px !important;
+  }
+
+  /* Speakers section on mobile */
+  .speaker-card-photo {
+    width: 200px !important;
+    height: 200px !important;
+  }
+
+  .speaker-block-2026 {
+    padding: 1.25rem 1rem !important;
+  }
+
+  .speaker-block-2026 .speaker-name {
+    font-size: 1.2rem !important;
+  }
+
+  .speaker-block-2026 .speaker-topic {
+    font-size: 0.84rem !important;
+    line-height: 1.42 !important;
+    min-height: auto !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Team photos on mobile */
+  .team-photo {
+    width: 185px !important;
+    height: 185px !important;
+  }
+
+  .team-card-2026 {
+    padding: 1.25rem 1rem !important;
+  }
+
+  .team-card-2026 .team-name {
+    font-size: 1.12rem !important;
+  }
+
+  .team-card-2026 .team-role {
+    font-size: 0.84rem !important;
+  }
+}
+
+.btn-linkedin-prominent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 230px;
+  padding: 9px 16px;
+  background-color: #0077b5;
+  color: #ffffff !important;
+  font-size: 0.84rem;
+  font-weight: 700;
+  border: 2px solid var(--black-02);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--black-02);
+  text-decoration: none !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  margin: 0 auto;
+}
+
+.btn-linkedin-prominent:hover {
+  background-color: #005582;
+  color: #ffffff !important;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--black-02);
+  text-decoration: none !important;
+}
+
+.btn-linkedin-prominent svg {
+  flex-shrink: 0;
+  margin-right: 6px;
+}
 
 /* ---------- ThreeUI 3D Section Backdrops ---------- */
 .threeui-section-bg {

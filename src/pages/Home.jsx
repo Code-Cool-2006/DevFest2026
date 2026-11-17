@@ -146,11 +146,10 @@ function What() {
         <div className="row align-items-center">
           <div className="col-lg-5 col-md-5">
             <div className="about-img position-relative">
-              <img src="/images/about/what/devfest2022.JPG" alt="" className="img-fluid w-100" />
+              <img src="/images/about/what/devfest2024.jpg" alt="DevFest 2024" className="img-fluid w-100" />
               <div className="img-block">
-                <img src="/images/about/what/devfest2022_2.JPG" alt="" className="img-fluid" />
+                <img src="/images/about/what/devfest2024_2.jpg" alt="DevFest 2024 Community" className="img-fluid" />
               </div>
-              <img src="/images/2026/sticker-gdg.png" className="what-sticker-badge" alt="DevFest 2026" />
             </div>
           </div>
           <div className="col-lg-7 col-md-7">
@@ -164,8 +163,7 @@ function What() {
               />
               <div className="df-about-body mt-3">
                 <p><b>DevFest is a community led tech conference, hosted by the Google Developer Groups (GDG) with a strong focus on knowledge exchange, networking, and learning about Google technologies to nurture the needs and interests of local-dev community.</b></p>
-                <p><b>DevFest Belgaum 2026 is an initiative by GDG Belgaum with a strong focus on knowledge exchange, networking and learning about technologies to nurture the needs and interests of local developer community ecosystem.</b></p>
-                <a href={EVENT.registerUrl} className="btn btn-hero btn-rounded mt-3" target="_blank" rel="noreferrer">REGISTER NOW</a>
+                <p className="mb-0"><b>DevFest Belgaum 2026 is an initiative by GDG Belgaum with a strong focus on knowledge exchange, networking and learning about technologies to nurture the needs and interests of local developer community ecosystem.</b></p>
               </div>
             </div>
           </div>
@@ -195,7 +193,7 @@ function Why() {
       </div>
       <section id="section-feature" className="section-bottom">
         <div className="container">
-          <div className="row">
+          <div className="row justify-content-center">
             {FEATURES.map((f) => (
               <div className="col-lg-4 col-md-6" key={f.title}>
                 <div className="feature-box mb-md-3 mt-3" style={{ backgroundColor: f.color }}>
@@ -247,16 +245,45 @@ function Schedule() {
           <div className="col-lg-12">
             <ul className="mt-5 time-table pl-0 list-unstyled">
               {SCHEDULE.map((s) => (
-                <li key={s.time + s.title} className="d-md-flex align-items-center justify-content-between bg-light p-4 mb-3"
-                  style={{ border: `20px solid ${s.color}`, borderRadius: 40 }}>
+                <li
+                  key={s.time + s.title}
+                  className="schedule-item d-md-flex align-items-center justify-content-between bg-light p-4 mb-3"
+                  style={{ borderColor: s.color, borderStyle: 'solid', borderRadius: 40 }}
+                >
                   <h4 className="time text-color">{s.time}</h4>
                   <div className="content">
                     <h3 className="mb-1">{s.title}</h3>
-                    {s.speaker && <p className="mb-2" style={{ fontWeight: 600, color: 'var(--color1)' }}>{s.speaker}</p>}
+                    {s.speaker && <p className="mb-2 schedule-speaker-label" style={{ fontWeight: 700, color: 'var(--color1)' }}>{s.speaker}</p>}
                     <p>{s.text}</p>
                   </div>
-                  <div className="content-img text-lg-right">
-                    <img src={s.img} alt="" className="img-fluid" />
+                  <div className="content-img schedule-content-img text-center text-md-right mt-3 mt-md-0">
+                    {s.images && s.images.length > 0 ? (
+                      <div className={`schedule-multi-avatars ${s.images.length <= 2 ? 'schedule-multi-avatars--duo' : 'schedule-multi-avatars--keynotes'}`}>
+                        {s.images.map((imgItem) => (
+                          <div key={imgItem.name} className="schedule-avatar-item">
+                            <img
+                              src={imgItem.img}
+                              alt={imgItem.name}
+                              className={`rounded-circle ${s.images.length <= 2 ? 'schedule-avatar-duo' : 'schedule-avatar-multi'}`}
+                              title={imgItem.name}
+                            />
+                            <span className="schedule-avatar-caption">
+                              {imgItem.name}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : s.speaker ? (
+                      <div className="d-inline-flex flex-column align-items-center">
+                        <img
+                          src={s.img}
+                          alt={s.speaker}
+                          className="rounded-circle schedule-speaker-photo"
+                        />
+                      </div>
+                    ) : (
+                      <img src={s.img} alt="" className="img-fluid schedule-icon" style={{ maxHeight: 85, objectFit: 'contain' }} />
+                    )}
                   </div>
                 </li>
               ))}
@@ -302,19 +329,78 @@ function Speakers() {
         </div>
         <div className="row">
           {SPEAKERS.map((s) => (
-            <div className="col-lg-4 col-sm-6" key={s.name}>
-              <div className="speaker-block style-2 mb-5">
-                <div className="img-block">
-                  <img src={s.img} alt={s.name} className="img-fluid rounded-circle" style={{ width: 180, height: 180, objectFit: 'cover', objectPosition: s.objectPosition || 'center center' }} />
+            <div className="col-lg-4 col-sm-6 mb-4 d-flex" key={s.name}>
+              <div
+                className="speaker-block-2026 w-100 d-flex flex-column align-items-center text-center p-4 mb-3"
+                style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: 24,
+                  border: 'var(--outline)',
+                  boxShadow: '6px 6px 0 var(--black-02)',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                }}
+              >
+                <div className="img-block mb-3">
+                  <img
+                    src={s.img}
+                    alt={s.name}
+                    className="rounded-circle speaker-card-photo"
+                    style={{
+                      objectPosition: s.objectPosition || 'center center',
+                    }}
+                  />
                 </div>
-                <div className="speaker-info text-center">
-                  <h4 className="mb-1 mt-3">{s.name}</h4>
-                  <p className="mb-2" style={{ fontSize: '0.82rem', color: '#555', lineHeight: 1.4 }}>{s.topic}</p>
-                  {s.linkedin && (
-                    <a href={s.linkedin} target="_blank" rel="noreferrer" style={{ fontSize: '0.8rem', color: 'var(--color1)', fontWeight: 600 }}>
-                      LinkedIn →
-                    </a>
-                  )}
+                <div className="speaker-info d-flex flex-column align-items-center flex-grow-1 w-100">
+                  <h4 className="speaker-name mb-2 mt-1" style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--black-02)' }}>
+                    {s.name}
+                  </h4>
+                  <p
+                    className="speaker-topic mb-3 flex-grow-1"
+                    style={{
+                      fontSize: '0.86rem',
+                      color: '#4a4a4a',
+                      lineHeight: 1.45,
+                      minHeight: 46,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {s.topic}
+                  </p>
+                  <div className="mt-auto w-100 pt-2">
+                    {s.linkedin ? (
+                      <a
+                        href={s.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-linkedin-prominent"
+                        aria-label={`${s.name} on LinkedIn`}
+                      >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          style={{ flexShrink: 0 }}
+                        >
+                          <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                        </svg>
+                        <span>Connect on LinkedIn</span>
+                      </a>
+                    ) : (
+                      <span
+                        className="btn-linkedin-prominent"
+                        style={{
+                          backgroundColor: 'var(--color1)',
+                          borderColor: 'var(--black-02)',
+                          color: '#ffffff',
+                          cursor: 'default',
+                        }}
+                      >
+                        <i className="tf-ion-code-working mr-2" style={{ fontSize: '1.05rem' }} />
+                        <span>Code Challenge Judge</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

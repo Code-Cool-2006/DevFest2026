@@ -19,12 +19,14 @@
   flex-direction: column;
   justify-content: space-between;
   perspective: 1300px;
-  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.5s ease;
+  will-change: opacity;
 }
 
 .df-preloader-root.is-warping {
   pointer-events: none;
-  opacity: 0;
+  opacity: 0 !important;
+  visibility: hidden;
 }
 
 /* ---------- Layer 1: ThreeUI WebGL Background Shaders ---------- */
