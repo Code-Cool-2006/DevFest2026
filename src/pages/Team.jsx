@@ -86,7 +86,7 @@ export default function Team() {
                   <div className="col-lg-3 col-sm-6" key={m.name || idx}>
                     <div className="speaker-block style-2 mb-5">
                       <div className="img-block">
-                        <img src={PLACEHOLDER_IMG} alt={m.name} className="img-fluid rounded-circle team-photo" />
+                        <img src={m.img || PLACEHOLDER_IMG} alt={m.name} className="img-fluid rounded-circle team-photo" style={{ width: 160, height: 160, objectFit: 'cover', objectPosition: m.objectPosition || 'center top' }} />
                       </div>
                       <div className="speaker-info text-center">
                         <h4 className="mb-0 mt-3">{m.name}</h4>

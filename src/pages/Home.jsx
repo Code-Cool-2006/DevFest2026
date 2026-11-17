@@ -247,11 +247,12 @@ function Schedule() {
           <div className="col-lg-12">
             <ul className="mt-5 time-table pl-0 list-unstyled">
               {SCHEDULE.map((s) => (
-                <li key={s.time} className="d-md-flex align-items-center justify-content-between bg-light p-4 mb-3"
+                <li key={s.time + s.title} className="d-md-flex align-items-center justify-content-between bg-light p-4 mb-3"
                   style={{ border: `20px solid ${s.color}`, borderRadius: 40 }}>
                   <h4 className="time text-color">{s.time}</h4>
                   <div className="content">
-                    <h3 className="mb-3">{s.title}</h3>
+                    <h3 className="mb-1">{s.title}</h3>
+                    {s.speaker && <p className="mb-2" style={{ fontWeight: 600, color: 'var(--color1)' }}>{s.speaker}</p>}
                     <p>{s.text}</p>
                   </div>
                   <div className="content-img text-lg-right">
@@ -301,13 +302,19 @@ function Speakers() {
         </div>
         <div className="row">
           {SPEAKERS.map((s) => (
-            <div className="col-lg-3 col-sm-6" key={s.name}>
+            <div className="col-lg-4 col-sm-6" key={s.name}>
               <div className="speaker-block style-2 mb-5">
                 <div className="img-block">
-                  <img src={s.img} alt={s.name} className="img-fluid rounded-circle" />
+                  <img src={s.img} alt={s.name} className="img-fluid rounded-circle" style={{ width: 180, height: 180, objectFit: 'cover', objectPosition: s.objectPosition || 'center center' }} />
                 </div>
                 <div className="speaker-info text-center">
-                  <h4 className="mb-0 mt-3">{s.name}</h4>
+                  <h4 className="mb-1 mt-3">{s.name}</h4>
+                  <p className="mb-2" style={{ fontSize: '0.82rem', color: '#555', lineHeight: 1.4 }}>{s.topic}</p>
+                  {s.linkedin && (
+                    <a href={s.linkedin} target="_blank" rel="noreferrer" style={{ fontSize: '0.8rem', color: 'var(--color1)', fontWeight: 600 }}>
+                      LinkedIn →
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
