@@ -22,6 +22,21 @@
     ]
   },
   {
+    "title": "Faculty Coordinators",
+    "members": [
+      {
+        "name": "Dr. Sharada Kori",
+        "img": "/images/speaker/dr-sharada-kori.jpg",
+        "objectPosition": "center 20%"
+      },
+      {
+        "name": "Prof. Namitha Bhat",
+        "img": "/images/speaker/prof-namitha-bhat.jpg",
+        "objectPosition": "center 20%"
+      }
+    ]
+  },
+  {
     "title": "Registration & RSVP",
     "members": [
       {
