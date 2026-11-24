@@ -103,7 +103,14 @@ function Hero() {
             </a>
             <span><i className="tf-ion-android-calendar" /> {EVENT.dateLabel}</span>
           </div>
-          <a href={EVENT.registerUrl} target="_blank" rel="noreferrer" className="btn btn-hero2 btn-rounded">REGISTER NOW</a>
+          <div className="d-flex flex-column align-items-center" style={{ gap: '14px' }}>
+            <a href={EVENT.registerUrl} target="_blank" rel="noreferrer" className="btn btn-hero2 btn-rounded">
+              REGISTER NOW
+            </a>
+            <a href="/walkthrough.html" target="_blank" rel="noreferrer" className="btn btn-hero2 btn-rounded">
+              START WALKTHROUGH
+            </a>
+          </div>
         </div>
       </div>
     </section>
