@@ -64,7 +64,8 @@ export default function App() {
     }
   }, [])
 
-  const isTeam = pathname.replace(/\/+$/, '') === '/team'
+  const cleanPath = pathname.replace(/\/+$/, '').toLowerCase()
+  const isTeam = cleanPath === '/team' || cleanPath === '/teams'
 
   return (
     <>

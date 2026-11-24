@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/walkthrough.html", "destination": "/walkthrough.html" },
+    { "source": "/((?!assets/|assests/|css/|fonts/|images/|plugins/|favicon|icons\\.svg|walkthrough\\.html).*)", "destination": "/index.html" }
+  ]
+}

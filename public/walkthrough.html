@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html data-stage="gate"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>DevFest Belagavi Walkthrough</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,140 +17,233 @@ html,body{height:100%}
 body{background:var(--bg);color:var(--fg);font-family:var(--font-body);overflow:hidden}
 #scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 #scene:active{cursor:grabbing}
-.ui{position:fixed;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;
+.ui{position:fixed;inset:0;box-sizing:border-box;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;
   padding-block:calc(env(safe-area-inset-top,0px) + 12px) calc(env(safe-area-inset-bottom,0px) + 12px);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .ui>*{pointer-events:auto}
 .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;pointer-events:none}
 .top>*{pointer-events:auto}
-.brand{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:0;backdrop-filter:blur(8px)}
+.brand{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:0;flex:0 1 auto;backdrop-filter:blur(8px)}
 .eyebrow{display:flex;gap:6px;align-items:center;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .dots{display:inline-flex;gap:3px}.dots i{width:7px;height:7px;border-radius:50%;display:block}
 h1{font:700 20px/1.15 var(--font-display);margin:4px 0 2px;text-wrap:balance}
 .sub{font-size:12.5px;color:var(--muted)}
-.map{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px;backdrop-filter:blur(8px);flex:none}
-.map{padding:0;overflow:hidden}
-.map canvas{display:block;width:150px;height:130px}
-#mapbtn{display:flex;align-items:center;gap:6px;width:100%;box-sizing:border-box;padding:9px 12px;border:0;background:none;color:var(--fg);font:700 13px var(--font-display,inherit);cursor:pointer;white-space:nowrap}
-#mapbtn i{font-style:normal;opacity:.6;transition:transform .25s}
+.top-r{display:flex;gap:8px;align-items:flex-start;justify-content:flex-end;flex:none}
+.quest{margin-top:5px;font:600 12px/1.3 var(--font-body);color:var(--blue);display:flex;align-items:center;gap:6px}
+.quest i{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 22%,transparent);flex:none;animation:qpulse 1.8s ease-in-out infinite}
+.quest.opt{color:#e07810}.quest.opt i{background:#f08a1c;box-shadow:0 0 0 3px rgba(240,138,28,.25)}
+.quest.done{color:var(--green)}.quest.done i{background:var(--green);animation:none}
+@keyframes qpulse{50%{transform:scale(1.3)}}
+.map{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:0;overflow:hidden;backdrop-filter:blur(8px);flex:none;transition:box-shadow .25s ease,border-color .25s ease}
+.map canvas{display:block;width:150px;height:130px;border-radius:6px}
+#mapbtn{display:flex;align-items:center;gap:6px;width:100%;box-sizing:border-box;padding:9px 12px;border:0;background:none;color:var(--fg);font:700 13px var(--font-display,inherit);cursor:pointer;white-space:nowrap;min-height:0}
+#mapbtn i{font-style:normal;opacity:.6;transition:transform .28s cubic-bezier(.22,1,.36,1)}
 .map.open #mapbtn i{transform:rotate(180deg)}
-.mapbody{display:none;width:150px;box-sizing:content-box;padding:2px 8px 8px}
+.mapbody{width:auto;max-width:0;max-height:0;opacity:0;box-sizing:content-box;padding:0;overflow:hidden;pointer-events:none;transform:translateY(-4px);transition:max-height .32s cubic-bezier(.22,1,.36,1),max-width .32s cubic-bezier(.22,1,.36,1),opacity .22s ease,padding .32s cubic-bezier(.22,1,.36,1),transform .32s cubic-bezier(.22,1,.36,1)}
 .mapbody small{max-width:150px;margin-left:auto;margin-right:auto}
-.map.open .mapbody{display:block;animation:mapin .25s ease}
-@keyframes mapin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.map.open .mapbody{max-width:166px;max-height:190px;opacity:1;padding:2px 8px 8px;pointer-events:auto;transform:none}
 .map small{display:block;font-size:10px;color:var(--muted);text-align:center;margin-top:4px;letter-spacing:.08em;text-transform:uppercase}
-.bottom{display:flex;flex-direction:column;gap:10px;align-items:stretch;max-width:560px;width:100%;margin-inline:auto;pointer-events:none}
+.iconbtn{width:38px;min-height:38px;padding:0;border-radius:10px;font:700 15px var(--font-display)}
+.bottom{display:flex;flex-direction:column;gap:8px;align-items:center;max-width:540px;width:100%;margin-inline:auto;pointer-events:none}
 .bottom>*{pointer-events:auto}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;backdrop-filter:blur(10px)}
-.step{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:600}
-.card h2{font:700 19px/1.2 var(--font-display);margin:4px 0 6px;text-wrap:balance}
-.card p{font-size:14px;line-height:1.5;margin:0;color:var(--fg);max-width:65ch}
-.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--yellow);color:#2b2100;margin-top:8px}
+.ui .top,.ui .bottom{transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
+.ui .bottom{transition-delay:.06s}
+.ui.ui-wait .top{opacity:0;transform:translateY(-12px)}
+.ui.ui-wait .bottom{opacity:0;transform:translateY(16px)}
+#prompt{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:99px;border:1.5px solid rgba(255,255,255,.28);background:linear-gradient(135deg,#14213df2,#1a6ddff0);color:#fff;font:700 14px/1.1 var(--font-display);box-shadow:0 10px 28px rgba(15,30,70,.38),0 0 0 3px rgba(26,109,223,.22);cursor:pointer;opacity:0;transform:translateY(8px) scale(.95);pointer-events:none;transition:opacity .18s ease,transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s ease}
+#prompt.on{opacity:1;transform:none;pointer-events:auto}
+#prompt.on:hover{transform:translateY(-2px) scale(1.02)}
+#prompt.on:active{transform:scale(.97)}
+#prompt kbd{font:700 11px/1 ui-monospace,Menlo,Consolas,monospace;padding:5px 8px;border-radius:6px;background:#fbbc04;color:#14213d;box-shadow:0 2px 0 #b38000;letter-spacing:.06em}
+.card{width:100%;box-sizing:border-box;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 15px;backdrop-filter:blur(10px);overflow:hidden;cursor:pointer;transition:border-color .22s ease,box-shadow .22s ease,padding .25s ease}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-k{font:700 10px/1 ui-monospace,Menlo,Consolas,monospace;padding:3px 6px;border-radius:5px;border:1px solid var(--line);color:var(--muted);letter-spacing:.05em;flex:none}
+.card.min{padding:9px 14px}
+.card.min #body,.card.min #tag{display:none}
+.card.min h2{margin:2px 0 0;font-size:15.5px}
+.card-in.swap-f{animation:cardf .3s cubic-bezier(.22,1,.36,1)}
+.card-in.swap-b{animation:cardb .3s cubic-bezier(.22,1,.36,1)}
+@keyframes cardf{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes cardb{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.step{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:700}
+.card h2{font:700 18px/1.2 var(--font-display);margin:3px 0 5px;text-wrap:balance}
+.card p{font-size:13.5px;line-height:1.48;margin:0;color:var(--fg);max-width:65ch}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--yellow);color:#2b2100;margin-top:7px}
 .tag[hidden]{display:none}
-.nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-button,.btn{font:600 14px var(--font-body);border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-height:42px}
+button,.btn{font:600 14px var(--font-body);border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-height:42px;transition:background-color .2s ease,border-color .2s ease,color .2s ease,transform .16s cubic-bezier(.22,1,.36,1),box-shadow .2s ease,opacity .2s ease}
+button:hover:not(:disabled),.btn:hover{transform:translateY(-1px)}
+button:active:not(:disabled),.btn:active{transform:scale(.97)}
 button.primary,button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 button:focus-visible,.btn:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
-.pips{display:flex;gap:5px;flex:1;justify-content:center}
-.pips button{min-height:0;padding:0;width:20px;height:8px;border-radius:99px;border:0;background:var(--line)}
-.pips button[aria-current="true"]{background:var(--blue)}
-.help{display:none;font-size:13px;line-height:1.55;color:var(--muted)}
-.help.on{display:block}
+.hud-keys{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;padding:6px 12px;border-radius:99px;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(8px);font:600 11.5px/1 var(--font-body);color:var(--muted)}
+.hud-keys kbd{font:700 10.5px/1 ui-monospace,Menlo,Consolas,monospace;padding:3px 6px;border-radius:5px;background:color-mix(in srgb,var(--fg) 9%,transparent);border:1px solid var(--line);color:var(--fg);margin-right:3px}
+.help{width:100%;box-sizing:border-box;cursor:default;max-height:0;opacity:0;padding-block:0;border-width:0;margin-block:-4px;overflow:hidden;pointer-events:none;transform:translateY(6px);font-size:13px;line-height:1.55;color:var(--muted);transition:max-height .32s cubic-bezier(.22,1,.36,1),opacity .22s ease,padding .28s cubic-bezier(.22,1,.36,1),margin .28s cubic-bezier(.22,1,.36,1),transform .28s cubic-bezier(.22,1,.36,1),border-width .2s}
+.help.on{max-height:min(48dvh,420px);opacity:1;padding-block:14px;border-width:1px;margin-block:0;overflow-y:auto;pointer-events:auto;transform:none}
 .help b{color:var(--fg)}
 .links{display:flex;gap:8px;flex-wrap:wrap}
-.joy{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 230px);width:96px;height:96px;border-radius:50%;
-  background:var(--panel);border:1px solid var(--line);touch-action:none;display:none;pointer-events:auto}
-.joy i{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px;border-radius:50%;background:var(--blue);opacity:.85}
-@media (pointer:coarse){.joy{display:block}.kbd{display:none}}
-@media (max-width:520px){.brand h1{font-size:17px}.map canvas{width:104px;height:90px}.card h2{font-size:17px}.card p{font-size:13.5px}.sub{display:none}}
-#boot{--bb:#ffffff;--bf:#1f1d1a;--bm:#6b655b;--bl:#1f1d1a;position:fixed;inset:0;display:grid;place-items:center;background:#fff;color:var(--bf);z-index:300;padding:18px;overflow:auto;transition:opacity .55s ease,transform .55s ease}
-#boot.out{opacity:0;transform:scale(1.03);pointer-events:none}
-.bt-card{position:relative;width:min(470px,100%);box-sizing:border-box;padding:26px 22px 22px;border:2px solid var(--bl);border-radius:26px;background:#fff;box-shadow:0 22px 60px rgba(20,30,60,.14);text-align:center;overflow:hidden;animation:btin .7s cubic-bezier(.2,1.2,.4,1)}
-@keyframes btin{from{opacity:0;transform:translateY(22px) scale(.96)}to{opacity:1;transform:none}}
-.bt-bar{position:absolute;left:0;right:0;top:0;height:8px;display:flex}.bt-bar i{flex:1}.bt-bar i:nth-child(1){background:#4285f4}.bt-bar i:nth-child(2){background:#ea4335}.bt-bar i:nth-child(3){background:#fbbc04}.bt-bar i:nth-child(4){background:#34a853}
-.bt-tag{margin:6px 0 0;font:700 11.5px/1.2 ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:#c5221f}
-.bt-h{margin:12px 0 4px;font:700 clamp(28px,8vw,40px)/1.1 'Space Grotesk',system-ui,sans-serif;letter-spacing:-.02em;display:flex;flex-wrap:wrap;gap:8px 10px;justify-content:center;align-items:center}
+.joy{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + var(--bh,130px) + 18px);width:108px;height:108px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--panel) 82%,transparent) 55%,color-mix(in srgb,var(--blue) 16%,var(--panel)));border:2px solid color-mix(in srgb,var(--blue) 40%,var(--line));box-shadow:0 8px 26px rgba(10,20,45,.22);backdrop-filter:blur(6px);touch-action:none;display:none;pointer-events:auto;z-index:40}
+.joy:before{content:"";position:absolute;inset:16px;border-radius:50%;border:1px dashed color-mix(in srgb,var(--fg) 22%,transparent)}
+.joy i{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px;border-radius:50%;background:linear-gradient(145deg,#3b86f7,var(--blue));box-shadow:0 4px 12px rgba(26,109,223,.45),inset 0 1px 1px rgba(255,255,255,.45);transition:transform .05s linear}
+.touch-only{display:none}
+@media (pointer:coarse){.joy{display:block}.kbd,.hud-keys,.card-k,#prompt kbd{display:none}.touch-only{display:inline}}
+:root.is-touch .joy{display:block}
+:root.is-touch .kbd,:root.is-touch .hud-keys,:root.is-touch .card-k,:root.is-touch #prompt kbd{display:none}
+:root.is-touch .touch-only{display:inline}
+@media (max-width:520px){.brand h1{font-size:17px}.map canvas{width:104px;height:90px}.card h2{font-size:16.5px}.card p{font-size:13px}.sub{display:none}}
+#boot{--bb:#f6f9fe;--bf:#14213d;--bm:#51607a;--bl:rgba(20,33,61,.12);position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#ffffff 0%,#eaf1fb 100%);color:var(--bf);z-index:300;padding:18px;contain:strict;backface-visibility:hidden;will-change:opacity,transform;transition:opacity .42s cubic-bezier(.22,1,.36,1),transform .42s cubic-bezier(.22,1,.36,1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #boot{--bb:#0e172a;--bf:#e8eefb;--bm:#9db0cf;--bl:rgba(255,255,255,.12);background:radial-gradient(circle at 50% 38%,#162442 0%,#0b1324 100%)}}
+#boot.out{opacity:0;transform:scale3d(1.025,1.025,1);pointer-events:none}
+.bt-card{position:relative;width:min(450px,100%);box-sizing:border-box;padding:28px 24px 22px;border:1.5px solid var(--bl);border-radius:24px;background:var(--panel);box-shadow:0 24px 64px rgba(15,28,58,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);text-align:center;overflow:hidden;backface-visibility:hidden;will-change:transform,opacity;animation:btin .45s cubic-bezier(.22,1,.36,1);transition:transform .38s cubic-bezier(.22,1,.36,1),opacity .34s ease}
+#boot.out .bt-card{transform:translate3d(0,-8px,0) scale3d(.97,.97,1);opacity:0}
+@keyframes btin{from{opacity:0;transform:translate3d(0,16px,0) scale3d(.97,.97,1)}to{opacity:1;transform:none}}
+.bt-bar{position:absolute;left:0;right:0;top:0;height:6px;display:flex}.bt-bar i{flex:1}.bt-bar i:nth-child(1){background:#4285f4}.bt-bar i:nth-child(2){background:#ea4335}.bt-bar i:nth-child(3){background:#fbbc04}.bt-bar i:nth-child(4){background:#34a853}
+.bt-spin{width:42px;height:42px;margin:2px auto 10px;border-radius:50%;background:conic-gradient(#4285f4,#ea4335,#fbbc04,#34a853,#4285f4);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px));will-change:transform;animation:btrot .9s linear infinite}
+@keyframes btrot{to{transform:rotate(360deg)}}
+.bt-tag{margin:0;font:700 11px/1.2 var(--font-display);letter-spacing:.13em;text-transform:uppercase;color:var(--blue)}
+.bt-h{margin:10px 0 6px;font:700 clamp(27px,7.5vw,38px)/1.12 var(--font-display);letter-spacing:-.02em;display:flex;flex-wrap:wrap;gap:8px 10px;justify-content:center;align-items:center}
 .bt-h .kn{font-family:'Noto Sans Kannada','Nirmala UI','Tunga',sans-serif;font-weight:600}
-.bt-h .yr{font-size:.62em;padding:3px 12px;border-radius:99px;background:#fbbc04;color:#1f1d1a}
-.bt-one{margin:0 0 16px;font:500 14px/1.4 Inter,system-ui,sans-serif;color:var(--bm)}
-.bt-one b{color:var(--bf)}
-.bt-s{margin:0 0 10px;font:italic 400 21px/1.2 Georgia,'Times New Roman',serif;color:#1a73e8}
-.bt-how{list-style:none;margin:0 0 16px;padding:0;display:grid;gap:8px;text-align:left}
-.bt-how li{display:flex;gap:11px;align-items:center;padding:9px 12px;border-radius:14px;background:color-mix(in srgb,var(--bf) 6%,transparent);font:500 13.5px/1.35 Inter,system-ui,sans-serif;color:var(--bf);opacity:0;animation:btrow .5s ease forwards}
-.bt-how li:nth-child(1){animation-delay:.35s}.bt-how li:nth-child(2){animation-delay:.5s}.bt-how li:nth-child(3){animation-delay:.65s}
-@keyframes btrow{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
-.bt-how b{font-weight:700}.bt-how .ic{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:16px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.12)}
-.bt-how kbd{font:600 11px ui-monospace,Menlo,Consolas,monospace;padding:1px 5px;border-radius:5px;border:1px solid color-mix(in srgb,var(--bf) 30%,transparent);background:color-mix(in srgb,var(--bf) 8%,transparent)}
-.bt-track{height:10px;border-radius:99px;overflow:hidden;background:color-mix(in srgb,var(--bf) 12%,transparent)}
-.bt-fill{height:100%;width:100%;transform-origin:left;transform:scaleX(.04);background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc04,#34a853);transition:transform .5s cubic-bezier(.3,.7,.2,1);position:relative}
-.bt-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);animation:btshine 1.3s linear infinite}
-@keyframes btshine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.bt-lab{margin:8px 0 0;font:600 12.5px Inter,system-ui,sans-serif;color:var(--bm);min-height:18px}
-.bt-go{margin-top:12px;width:100%;box-sizing:border-box;padding:13px 20px;border:0;border-radius:99px;cursor:pointer;font:700 15px 'Space Grotesk',system-ui,sans-serif;color:#fff;background:#1a73e8;box-shadow:0 8px 22px rgba(26,115,232,.35);transition:opacity .3s,transform .15s}
-.bt-go[disabled]{opacity:.45;cursor:progress;box-shadow:none}.bt-go:not([disabled]):hover{transform:translateY(-2px)}
-.bt-note{display:none;margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#fde7e6;color:#8a1c17;text-align:left;font:500 12.5px/1.45 Inter,system-ui,sans-serif}
-.bt-tip{margin:12px 0 0;font:500 11.5px Inter,system-ui,sans-serif;color:var(--bm)}
-@media (prefers-reduced-motion:reduce){.bt-card,.bt-how li,.bt-fill:after{animation:none!important;opacity:1}#boot{transition:none}}
-#fade{position:fixed;inset:0;width:100%;height:100%;display:block;pointer-events:none;opacity:0}
-.card.swap{animation:cardin .45s ease}
-@keyframes cardin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.bt-h .yr{font-size:.58em;padding:4px 12px;border-radius:99px;background:#fbbc04;color:#1f1d1a}
+.bt-s{margin:0 0 16px;font:500 14px/1.45 var(--font-body);color:var(--bm)}
+.bt-track{height:8px;border-radius:99px;overflow:hidden;background:color-mix(in srgb,var(--bf) 10%,transparent);contain:paint}
+.bt-fill{height:100%;width:100%;transform-origin:left;transform:scale3d(.08,1,1);background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc04,#34a853);will-change:transform;transition:transform .28s cubic-bezier(.22,1,.36,1);position:relative}
+.bt-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 28%,rgba(255,255,255,.6) 50%,transparent 72%);will-change:transform;animation:btshine 1.05s linear infinite}
+@keyframes btshine{from{transform:translate3d(-100%,0,0)}to{transform:translate3d(100%,0,0)}}
+.bt-lab{margin:9px 0 0;font:600 12.5px var(--font-body);color:var(--bm);min-height:18px}
+.bt-go{margin-top:12px;width:100%;box-sizing:border-box;padding:13px 20px;border:0;border-radius:99px;cursor:pointer;font:700 15px var(--font-display);color:#fff;background:#1a73e8;box-shadow:0 8px 22px rgba(26,115,232,.35);transition:opacity .3s,transform .15s}
+.bt-note{display:none;margin:12px 0 0;padding:10px 12px;border-radius:12px;background:#fde7e6;color:#8a1c17;text-align:left;font:500 12.5px/1.45 var(--font-body)}
+@media (prefers-reduced-motion:reduce){.bt-card,.bt-spin,.bt-fill:after{animation:none!important;opacity:1}#boot{transition:none}}
+#fade{position:fixed;inset:0;background:#0a1224;pointer-events:none;opacity:0;z-index:30;will-change:opacity}
+:root:not([data-stage="free"]) #scene{cursor:default}
+:root:not([data-stage="free"]) #joy,:root:not([data-stage="free"]) .hud-keys,:root:not([data-stage="free"]) #prompt,:root:not([data-stage="free"]) #card,:root:not([data-stage="free"]) #hspill,:root:not([data-stage="free"]) #mapbox,:root:not([data-stage="free"]) #helpbtn,:root:not([data-stage="free"]) #help,:root:not([data-stage="free"]) #exitbtn{display:none!important}
+#exitbtn.exitbtn{min-height:38px;padding:0 14px;border-radius:99px;background:var(--red);border-color:var(--red);color:#fff;font:700 13px/1 var(--font-display);white-space:nowrap;gap:5px;box-shadow:0 6px 18px rgba(224,57,45,.32)}
+#exitbtn.exitbtn:hover{background:#c92e22;border-color:#c92e22}
+@media (max-width:720px){
+  .top-r{flex-wrap:wrap;max-width:54vw;gap:6px}
+  #exitbtn.exitbtn{min-height:34px;padding:0 12px;font-size:12px}
+}
+:root[data-stage="gate"] .ui{opacity:0;pointer-events:none}
+#gatecard,#tourmodal{position:fixed;inset:0;z-index:150;display:none;place-items:center;padding:18px;box-sizing:border-box;pointer-events:none}
+:root[data-stage="gate"] #gatecard.on,#tourmodal.on{display:grid;pointer-events:auto}
+#gatecard{align-items:end;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px);background:linear-gradient(180deg,transparent 42%,rgba(10,18,36,.42))}
+#tourmodal{background:rgba(10,18,36,.52);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.gm-card{width:min(460px,100%);box-sizing:border-box;background:var(--panel);color:var(--fg);border:1.5px solid var(--line);border-radius:22px;padding:22px 22px 20px;box-shadow:0 24px 64px rgba(10,20,45,.32);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);text-align:center;animation:btin .42s cubic-bezier(.22,1,.36,1)}
+.gm-bar{height:5px;border-radius:99px;overflow:hidden;display:flex;margin:-6px 0 14px}.gm-bar i{flex:1}.gm-bar i:nth-child(1){background:#4285f4}.gm-bar i:nth-child(2){background:#ea4335}.gm-bar i:nth-child(3){background:#fbbc04}.gm-bar i:nth-child(4){background:#34a853}
+.gm-tag{display:inline-block;font:700 11px/1 var(--font-display);letter-spacing:.13em;text-transform:uppercase;padding:5px 10px;border-radius:99px;background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)}
+.gm-tag.opt{background:rgba(240,138,28,.16);color:#d96b08}
+.gm-tag.done{background:rgba(30,158,90,.16);color:var(--green)}
+.gm-card h2{font:700 clamp(21px,5.4vw,26px)/1.18 var(--font-display);margin:10px 0 7px;text-wrap:balance}
+.gm-card p{margin:0 auto 16px;font-size:14px;line-height:1.52;color:var(--muted);max-width:42ch}
+.gm-acts{display:flex;flex-direction:column;gap:9px}
+.gm-btn{width:100%;box-sizing:border-box;min-height:46px;border-radius:99px;font:700 15px var(--font-display);padding:12px 20px}
+.gm-btn.pri{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 10px 26px rgba(26,109,223,.34)}
+.gm-btn.saffron{background:#e07810;border-color:#e07810;color:#fff;box-shadow:0 10px 26px rgba(224,120,16,.32)}
+#toast{width:min(520px,100%);box-sizing:border-box;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:12px 16px;box-shadow:0 14px 36px rgba(10,20,45,.22);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);text-align:center;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .26s ease,transform .28s cubic-bezier(.22,1,.36,1);display:none}
+:root[data-stage="tour"] #toast{display:block}
+#toast.on{opacity:1;transform:none}
+#toastbadge{display:inline-block;font:700 11px/1.1 var(--font-display);letter-spacing:.11em;text-transform:uppercase;padding:4px 10px;border-radius:99px;background:var(--blue);color:#fff;margin-bottom:6px}
+#toasttxt{margin:0;font:600 14.5px/1.42 var(--font-body);color:var(--fg);text-wrap:balance}
+#tourbar{position:fixed;left:0;right:0;bottom:0;height:4px;background:color-mix(in srgb,var(--fg) 12%,transparent);z-index:70;pointer-events:none;display:none}
+:root[data-stage="tour"] #tourbar{display:block}
+#tourfill{height:100%;width:100%;transform-origin:left;transform:scaleX(.02);background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc04,#34a853);transition:transform .2s linear}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
-<canvas id="scene" aria-label="3D walkthrough of the KLS Gogte Institute of Technology campus from the Jnanaganga gate to the Silver Jubilee Auditorium"></canvas>
-<canvas id="fade" aria-hidden="true"></canvas>
+<canvas id="scene" aria-label="Interactive 3D guided tour and walkthrough of KLS Gogte Institute of Technology for DevFest Belagavi 2026"></canvas>
+<div id="fade" aria-hidden="true"></div>
 <div id="boot" role="status" aria-live="polite">
   <div class="bt-card">
     <div class="bt-bar"><i></i><i></i><i></i><i></i></div>
-    <p class="bt-tag">● Venue walk-through · KLS GIT, Udyambag</p>
+    <div class="bt-spin" aria-hidden="true"></div>
+    <p class="bt-tag">Guided 3D Campus Tour · KLS GIT</p>
     <h1 class="bt-h">DevFest <span class="kn">ಬೆಳಗಾವಿ</span> <span class="yr">2026</span></h1>
-    <p class="bt-s">Take a walk through KLS GIT.</p>
-    <p class="bt-one" id="btone">Tap <b>Next</b> to walk the venue, drag to look around.</p>
+    <p class="bt-s">Preparing your guided campus tour…</p>
     <div class="bt-track"><div class="bt-fill" id="btfill"></div></div>
     <p class="bt-lab" id="btlab">Warming up…</p>
     <div class="bt-note" id="btnote"></div>
-    <button class="bt-go" id="btgo" type="button" disabled>Loading…</button>
     <a id="bthome" href="/" class="bt-go" style="display:none;text-decoration:none;text-align:center;">← Back to Home</a>
   </div>
 </div>
 
-<div class="ui">
+<div id="gatecard" role="region" aria-label="Start KLS GIT Campus Tour">
+  <div class="gm-card">
+    <div class="gm-bar"><i></i><i></i><i></i><i></i></div>
+    <span class="gm-tag">Jnanaganga Gate · KLS GIT</span>
+    <h2>DevFest Belagavi 2026 Venue Tour</h2>
+    <p>Step through the Jnanaganga Gate for an automated guided tour of SJ Auditorium, IT Block, and Sri Vidya Ganapati Mandir.</p>
+    <div class="gm-acts">
+      <button class="gm-btn pri" id="starttour" type="button">Start Tour of KLS GIT →</button>
+    </div>
+  </div>
+</div>
+
+<div id="tourmodal" role="dialog" aria-modal="true" aria-labelledby="tmh">
+  <div class="gm-card">
+    <div class="gm-bar"><i></i><i></i><i></i><i></i></div>
+    <span class="gm-tag" id="tmtag">Optional Campus Visit</span>
+    <h2 id="tmh">Visit Sri Vidya Ganapati Mandir?</h2>
+    <p id="tmp"></p>
+    <div class="gm-acts" id="tmacts-mandir">
+      <button class="gm-btn saffron" id="tmyes" type="button">Yes, visit the Mandir →</button>
+      <button class="gm-btn" id="tmno" type="button">No, finish tour</button>
+    </div>
+    <div class="gm-acts" id="tmacts-done" hidden>
+      <button class="gm-btn pri" id="tmfree" type="button">Explore campus on your own →</button>
+      <a class="btn gm-btn" id="tmreg" href="https://konfhub.com/google-developer-group-belgaum-devfest-2026" target="_blank" rel="noopener">Register for DevFest 2026 ↗</a>
+      <a class="btn gm-btn" id="tmexit" href="/" target="_top">← Exit Walkthrough</a>
+    </div>
+  </div>
+</div>
+
+<div id="tourbar" aria-hidden="true"><div id="tourfill"></div></div>
+
+<div class="ui ui-wait">
   <div class="top">
     <div class="brand">
-      <div class="eyebrow"><span class="dots"><i style="background:var(--blue)"></i><i style="background:var(--red)"></i><i style="background:var(--yellow)"></i><i style="background:var(--green)"></i></span>Venue walk-through · Belagavi</div>
-      <h1>DevFest 2026 Belagavi</h1>
-      <div class="sub">KLS Gogte Institute of Technology, Udyambag</div>
+      <div class="eyebrow"><span class="dots"><i style="background:var(--blue)"></i><i style="background:var(--red)"></i><i style="background:var(--yellow)"></i><i style="background:var(--green)"></i></span>DevFest 2026 · KLS GIT</div>
+      <h1 id="brandh">Guided Campus Tour</h1>
+      <div class="quest" id="quest"><i></i><span id="questtxt">Ready at Jnanaganga Gate</span></div>
     </div>
-    <div class="map" id="mapbox"><button id="mapbtn" type="button" aria-expanded="false" aria-controls="mapbody">🗺️ <span>Site plan</span> <i>▾</i></button><div class="mapbody" id="mapbody"><canvas id="plan" width="300" height="260"></canvas><small>Orange = optional Mandir walk</small></div></div>
+    <div class="top-r">
+      <a class="btn exitbtn" id="exitbtn" href="/" target="_top" aria-label="Exit walkthrough to main website">← Exit Walkthrough</a>
+      <div class="map" id="mapbox"><button id="mapbtn" type="button" aria-expanded="false" aria-controls="mapbody">🧭 <span>Radar</span> <i>▾</i></button><div class="mapbody" id="mapbody"><canvas id="plan" width="300" height="260"></canvas><small>Saffron = Mandir path</small></div></div>
+      <button class="iconbtn" id="helpbtn" type="button" aria-expanded="false" aria-controls="help" aria-label="Controls and campus map">?</button>
+    </div>
   </div>
 
   <div class="bottom">
-    <div class="card" id="card">
-      <div class="step" id="step"></div>
-      <h2 id="title"></h2>
-      <p id="body"></p>
-      <span class="tag" id="tag" hidden>Suggested setup</span>
-    </div>
-    <div class="nav">
-      <button id="prev" aria-label="Previous stop">← Back</button>
-      <div class="pips" id="pips"></div>
-      <button id="next" class="primary" aria-label="Next stop">Next →</button>
+    <div id="toast" role="status" aria-live="polite"><span id="toastbadge"></span><p id="toasttxt"></p></div>
+    <button id="prompt" type="button"><kbd>ENTER</kbd><span id="prompttxt">Enter</span></button>
+    <div class="card" id="card" title="Press Enter or tap to toggle details">
+      <div class="card-in" id="cardin">
+        <div class="card-hd">
+          <div class="step" id="step"></div>
+          <span class="card-k" id="cardk">ENTER · HIDE</span>
+        </div>
+        <h2 id="title"></h2>
+        <p id="body"></p>
+        <span class="tag" id="tag" hidden>Suggested setup</span>
+      </div>
     </div>
     <div class="card help" id="help">
-      <p class="kbd"><b>W A S D</b> or arrow keys to walk, <b>Shift</b> to run, <b>drag</b> to look around. <b>← →</b> jump between stops, <b>F</b> follow the walker, <b>O</b> orbit, <b>H</b> toggles this panel.</p>
-      <p>On a phone, use the joystick to walk and drag the scene to look.</p>
-      <p style="margin-top:8px">The route, the gate and the auditorium follow the campus photos. The blue stripe on the ground is the way to the auditorium; the grey path leads to the Main building. After the talks, the red-earth lane leads to the IT block: up the steps, through the glass doors, and the check-in desk is straight ahead. The Mandir visit is optional: from the IT block, follow the saffron stripe west along the same lane, across the junction and past the Main building, then south through the garden to the Mandir. Building heights, the crowd and the signs are a simplified model, not a survey. Check campus signs on the day.</p>
+      <p class="kbd"><b>W A S D</b> or <b>↑ ↓</b> to walk, <b>← →</b> or <b>drag</b> to look around, <b>Shift</b> to sprint, <b>Enter</b> to enter doors / interact / toggle card, <b>M</b> radar, <b>O</b> drone view, <b>F</b> follow NPC.</p>
+      <p>On mobile, use the bottom-left <b>joystick</b> to walk (push full tilt to jog), <b>drag</b> anywhere to look around, and walk into doors or tap the prompt button to enter.</p>
+      <p style="margin-top:8px">Follow the <b>blue stripe</b> from the Jnanaganga gate to the Silver Jubilee Auditorium. After the talks, take the red-earth lane east to the <b>IT Block</b> lobby check-in desk. For the optional <b>Sri Vidya Ganapati Mandir</b> visit, follow the <b>saffron stripe</b> west past the Main building and south through the garden.</p>
       <p style="margin-top:8px"><b>Address:</b> Jnana Ganga, Udyambag, Belagavi 590008, Karnataka.</p>
       <div class="links" style="margin-top:10px">
+        <a class="btn" href="/" target="_top">← Exit Walkthrough</a>
+        <button class="btn" id="replaytour" type="button">Replay Guided Tour</button>
         <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=15.8152112,74.4874746">Open in Google Maps</a>
         <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=15.8152112,74.4874746">Get directions</a>
       </div>
     </div>
-    <div class="nav">
-      <button id="mandirbtn">Optional: visit the Mandir</button>
-      <button id="followbtn">Follow the walker</button>
-      <button id="orbit">Orbit</button>
-      <button id="helpbtn" aria-expanded="false" aria-controls="help">Controls</button>
+    <div class="hud-keys" aria-hidden="true">
+      <span><kbd>WASD</kbd>Walk</span>
+      <span><kbd>SHIFT</kbd>Sprint</span>
+      <span><kbd>ENTER</kbd>Interact</span>
+      <span><kbd>DRAG</kbd>Look</span>
+      <span><kbd>M</kbd>Radar</span>
+      <span><kbd>O</kbd>Drone</span>
     </div>
   </div>
 </div>
@@ -167,14 +260,14 @@ button:focus-visible,.btn:focus-visible{outline:3px solid var(--yellow);outline-
 (function(){
   var boot=document.getElementById('boot'),btfill=document.getElementById('btfill'),btlab=document.getElementById('btlab'),btgo=document.getElementById('btgo'),btnote=document.getElementById('btnote');
   var has3D=true;
-  function stage(p,t,d){btfill.style.transition='transform '+(d||.5)+'s cubic-bezier(.3,.7,.2,1)';btfill.style.transform='scaleX('+p+')';btlab.textContent=t;}
+  function stage(p,t,d){btfill.style.transition='transform '+(d||.26)+'s cubic-bezier(.22,1,.36,1)';btfill.style.transform='scale3d('+p+',1,1)';btlab.textContent=t;}
 
   function showNo3D(msg){
     has3D=false;
     stage(0,msg||"This browser doesn't support 3D view.",.2);
     btnote.style.display='block';
     btnote.innerHTML='<b>This browser doesn\'t support 3D view.</b><br>To experience the 3D venue walkthrough, please open this page in Chrome, Edge, or Safari with hardware acceleration enabled.';
-    btgo.style.display='none';
+    if(btgo)btgo.style.display='none';
     var bthome=document.getElementById('bthome');
     if(bthome)bthome.style.display='block';
     var btone=document.getElementById('btone');
@@ -199,22 +292,27 @@ button:focus-visible,.btn:focus-visible{outline:3px solid var(--yellow);outline-
       showNo3D("This browser doesn't support 3D view.");
       return;
     }
-    stage(1,'Ready. Let\u2019s go!',.35);btgo.disabled=false;btgo.textContent='Start walking \u2192';btgo.focus({preventScroll:true});
-    function enter(){boot.classList.add('out');setTimeout(function(){boot.remove();},600);removeEventListener('keydown',kd);}
-    function kd(e){if(e.key==='Enter')enter();}
-    btgo.onclick=enter;addEventListener('keydown',kd);
+    if(matchMedia('(pointer:coarse)').matches)document.documentElement.classList.add('is-touch');
+    stage(1,'Welcome to KLS GIT!',.25);
+    var u=document.querySelector('.ui'),gc=document.getElementById('gatecard');
+    if(u)u.classList.remove('ui-wait');
+    if(gc)gc.classList.add('on');
+    boot.classList.add('out');
+    setTimeout(function(){boot.remove();var st=document.getElementById('starttour');if(st)st.focus({preventScroll:true});},420);
   }
   function start(){
     if(!has3D)return;
-    stage(.9,'Building the campus\u2026',6);
-    try{main();}
-    catch(err){showNo3D('Could not start the 3D view: '+err.message);if(window.console)console.error(err);}
+    stage(.48,'Building 3D campus\u2026',.24);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      try{main();}
+      catch(err){showNo3D('Could not start the 3D view: '+err.message);if(window.console)console.error(err);}
+    });});
   }
-  var began=false;function begin(){if(!began){began=true;stage(.35,'Loading the campus\u2026',.6);requestAnimationFrame(function(){setTimeout(start,80);});}}
-  stage(.15,'Warming up the fonts\u2026',.6);
+  var began=false;function begin(){if(!began){began=true;stage(.28,'Loading KLS GIT venue\u2026',.25);requestAnimationFrame(start);}}
+  stage(.14,'Initializing\u2026',.25);
   if(document.fonts&&document.fonts.load){
     Promise.all([document.fonts.load('700 40px "Space Grotesk"'),document.fonts.load('600 14px Inter')]).then(begin,begin);
-    setTimeout(begin,1500);
+    setTimeout(begin,900);
   }else begin();
 
 function main(){
@@ -223,7 +321,7 @@ function main(){
   var renderer=null,soft=false,ctx=null;
   var glOpts=[{antialias:true},{antialias:false},{antialias:false,powerPreference:'low-power'}],glErr=null;
   for(var gi=0;gi<glOpts.length&&!renderer;gi++){
-    try{glOpts[gi].canvas=canvas;renderer=new THREE.WebGLRenderer(glOpts[gi]);renderer.setPixelRatio(Math.min(devicePixelRatio||1,gi?1:(matchMedia('(pointer:coarse)').matches?1.5:2)));}
+    try{glOpts[gi].canvas=canvas;renderer=new THREE.WebGLRenderer(glOpts[gi]);renderer.setPixelRatio(Math.min(devicePixelRatio||1,gi?1:2));}
     catch(e){glErr=e;renderer=null;console.warn('WebGL attempt '+(gi+1)+' failed:',e&&e.message);}
   }
   if(!renderer){
@@ -248,11 +346,13 @@ function main(){
     return box(w,h,d,c,x,y,z,layer);
   }
   function label(text,w,h,bg,fg,fs,ry,x,y,z,draw){
-    var c=document.createElement('canvas');c.width=1024;c.height=Math.max(32,Math.round(1024*h/w));
+    var rawH=1024*h/w,sc=rawH>1024?1024/rawH:1;
+    var c=document.createElement('canvas');c.width=Math.max(32,Math.round(1024*sc));c.height=Math.max(32,Math.round(rawH*sc));
     var g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);if(draw)draw(g,c);
-    g.fillStyle=fg;g.font='700 '+fs+'px "Space Grotesk",Inter,"Noto Sans Kannada","Nirmala UI",sans-serif';g.textAlign='center';g.textBaseline='middle';
-    var lines=text.split('\n');lines.forEach(function(l,i){g.fillText(l,c.width/2,c.height/2+(i-(lines.length-1)/2)*fs*1.15);});
-    var t=new THREE.CanvasTexture(c);
+    var sfs=fs*sc;
+    g.fillStyle=fg;g.font='700 '+sfs+'px "Space Grotesk",Inter,"Noto Sans Kannada","Nirmala UI",sans-serif';g.textAlign='center';g.textBaseline='middle';
+    var lines=text.split('\n');lines.forEach(function(l,i){g.fillText(l,c.width/2,c.height/2+(i-(lines.length-1)/2)*sfs*1.15);});
+    var t=new THREE.CanvasTexture(c);t.generateMipmaps=false;t.minFilter=THREE.LinearFilter;
     var m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
     m.position.set(x,y,z);m.rotation.y=ry||0;scene.add(m);
     recs.push({t:'l',m:m,cv:c,w:w,h:h,parent:(lastRec&&!lastRec.root)?lastRec:null,ord:recs.length,layer:9});
@@ -260,9 +360,9 @@ function main(){
   }
 
   function panel(w,h,ry,x,y,z,res,draw,adj){
-    var c=document.createElement('canvas');c.width=Math.max(8,Math.round(w*res));c.height=Math.max(8,Math.round(h*res));
+    var c=document.createElement('canvas');c.width=Math.max(8,Math.min(1024,Math.round(w*res)));c.height=Math.max(8,Math.min(1024,Math.round(h*res)));
     draw(c.getContext('2d'),c);
-    var t=new THREE.CanvasTexture(c);
+    var t=new THREE.CanvasTexture(c);t.generateMipmaps=false;t.minFilter=THREE.LinearFilter;
     var m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
     m.position.set(x,y,z);m.rotation.y=ry;scene.add(m);
     recs.push({t:'l',m:m,cv:c,w:w,h:h,parent:(lastRec&&!lastRec.root)?lastRec:null,keyAdj:adj||0,ord:recs.length,layer:9});return m;
@@ -461,8 +561,8 @@ function main(){
     rows.forEach(function(r,i){label(r.t,w-.3,rh-.15,r.c,'#ffffff',84,0,x,y0+H-.15-rh/2-i*rh,z+.32);});
     solid(x,z+.1,w,.7);
   }
-  signpost(4.5,-23.5,5.6,[{t:'AUDITORIUM  ↑',c:C_AUD},{t:'MAIN BUILDING  ←',c:C_MAIN},{t:'IT BLOCK  →',c:C_IT}]);
-  signpost(-7.2,-37,5.6,[{t:'AUDITORIUM  ↑',c:C_AUD},{t:'IT BLOCK  →',c:C_IT}]);
+  signpost(4.5,-23.5,5.6,[{t:'SJ AUDITORIUM  ↑',c:C_AUD},{t:'MAIN BUILDING  ←',c:C_MAIN},{t:'IT BLOCK  →',c:C_IT}]);
+  signpost(-7.2,-37,5.6,[{t:'SJ AUDITORIUM  ↑',c:C_AUD},{t:'IT BLOCK  →',c:C_IT}]);
   // B1: the blue institute name board on the small lawn between the two paths to the Main building
   (function(){var x=B1[0]-1.5,z=B1[1]-.8;
     box(4.8,.5,1.2,0x23272d,x,.25,z);box(.14,2.0,.14,0x3a3a3a,x-2,1.5,z);box(.14,2.0,.14,0x3a3a3a,x+2,1.5,z);
@@ -602,6 +702,7 @@ function main(){
       [-6.7,6.7].forEach(function(cx2){box(9,.3,.7,0x2a2d38,X+cx2,yt+.4,rzz);box(9,.8,.14,0x363a47,X+cx2,yt+.95,rzz+.32);box(9,.1,.16,0x474c5b,X+cx2,yt+1.38,rzz+.32);for(var a=0;a<10;a++)box(.08,.35,.6,0x1c1e25,X+cx2-4.5+a,yt+.62,rzz+.05);});
     }
     label('EXIT',1.6,.7,'#1e9e5a','#ffffff',230,Math.PI/2,X-14.2,5.2,-8);label('EXIT',1.6,.7,'#1e9e5a','#ffffff',230,-Math.PI/2,X+14.2,5.2,-8);
+    box(2.1,.68,.12,0x16221c,X,5.86,18.96);label('EXIT  ↑',1.96,.56,'#1e9e5a','#ffffff',190,Math.PI,X,5.86,18.88);
   })();
 
 
@@ -650,11 +751,26 @@ function main(){
       g.fillStyle='#c4623a';for(var q=0;q<12;q++)g.fillRect(W*.05+q*W*.08,H*.6,W*.012,H*.08);
     }
     flat(30,28,0x9aa0a8,X,0,1);flat(16,20,0xa9aeb6,X,0,2);flat(4,2.4,0x7a2b2b,X,-12.3,3);          // granite floor and the door mat
-    // north wall: cream wall and lifts side on the left of the door, door, cream pier, then glass round the corner
-    box(12.9,8.6,.5,CR,X-8.55,4.3,-14.25);
+    // north wall: cream wall and lifts side on the left of the door, open glass exit doorway showing sunlit IT lane, cream pier, then glass round the corner
+    var nWall=box(12.9,8.6,.5,CR,X-8.55,4.3,-14.25),nWallRec=lastRec;
     box(.6,4.6,.6,0xf1ede4,X-2.25,2.3,-14.1);box(.9,8.6,.9,CR,X+2.55,4.3,-14.1);
-    box(1.9,3.9,.08,0xcfe5f2,X-1.05,2.0,-14.2);box(1.9,3.9,.08,0xcfe5f2,X+1.05,2.0,-14.2);box(4.2,3.7,.08,0xbcd9ea,X,6.8,-14.2);
-    box(.06,.9,.06,0xc0c4c8,X-.25,1.9,-14.05);box(.06,.9,.06,0xc0c4c8,X+.25,1.9,-14.05);
+    box(4.2,3.7,.08,0xbcd9ea,X,6.8,-14.2);
+    lastRec=nWallRec;
+    panel(4.2,4.0,0,X,2.02,-14.08,96,function(g,c){
+      var W=c.width,H=c.height,sky=g.createLinearGradient(0,0,0,H*.56);
+      sky.addColorStop(0,'#7eb8ec');sky.addColorStop(1,'#d6eaf8');g.fillStyle=sky;g.fillRect(0,0,W,H);
+      g.fillStyle='#c9805e';g.fillRect(W*.08,H*.24,W*.84,H*.26);g.fillStyle='#eae5d8';g.fillRect(W*.08,H*.24,W*.84,H*.04);
+      g.fillStyle='#34506f';for(var wi=0;wi<6;wi++)g.fillRect(W*(.13+wi*.13),H*.31,W*.08,H*.09);
+      g.fillStyle='#2f7d3b';[[.14,.44,.13],[.84,.43,.14],[.52,.46,.1]].forEach(function(t){g.beginPath();g.ellipse(W*t[0],H*t[1],W*t[2],H*.12,0,0,7);g.fill();});
+      g.fillStyle='#7bbd57';g.fillRect(0,H*.52,W,H*.14);
+      g.fillStyle='#b5805a';g.fillRect(0,H*.60,W,H*.18);
+      g.fillStyle='#8a3b3b';for(var st=0;st<3;st++)g.fillRect(W*(.16-st*.03),H*(.74+st*.08),W*(.68+st*.06),H*.08);
+      g.fillStyle='rgba(195,226,245,.34)';g.fillRect(0,0,W*.23,H);g.fillRect(W*.77,0,W*.23,H);
+      g.strokeStyle='#dfe5ec';g.lineWidth=Math.max(4,W*.016);g.strokeRect(2,2,W-4,H-4);
+      g.beginPath();g.moveTo(W*.23,0);g.lineTo(W*.23,H);g.moveTo(W*.77,0);g.lineTo(W*.77,H);g.moveTo(0,H*.18);g.lineTo(W,H*.18);g.stroke();
+      g.fillStyle='#b8c0c8';g.fillRect(W*.20,H*.46,W*.016,H*.14);g.fillRect(W*.784,H*.46,W*.016,H*.14);
+    },.35);
+    box(2.5,.64,.12,0x16221c,X,4.58,-14.08);label('EXIT  ·  IT LANE',2.36,.52,'#1e9e5a','#ffffff',160,0,X,4.58,-14.0);
     box(12,5.4,.3,GL,X+9,3.7,-14.25);box(12,2.5,.5,CR,X+9,7.35,-14.25);
     label('',11.6,5.4,'#9ec8ee','#9ec8ee',10,0,X+9,3.7,-14.05,drawView);
     // east wall: glass (near the door) and then the orange mural wall
@@ -818,19 +934,19 @@ function main(){
   label('DevFest 2026',3.2,.5,'#1d1a24','#f1f1f1',80,0,IX-8,1.95,-12.37);
   [-9.2,9.2].forEach(function(o){box(.6,.6,.6,0x3b3b3b,IX+o,1.1,-17.8);box(.7,1.4,.7,0x3f7a3f,IX+o,2.1,-17.8);});
 
-  // Hall detail: acoustic slats, speakers, rear doors open, stage steps
+  // Hall detail: acoustic slats, speakers, open doorway into corridor, stage steps
   [-1,1].forEach(function(sd){for(var zz=-18;zz<=18;zz+=1.2)box(.06,3.4,.5,0x8a8678,IX+sd*14.2,6.4,zz);[-10,0,10].forEach(function(z0){box(.5,.6,.5,0x16171a,IX+sd*14,7.4,z0);});});
-  box(5,4.4,.1,0x14100c,IX,2.2,18.88);box(.25,4.7,.2,0x6b3a1a,IX-2.55,2.35,18.85);box(.25,4.7,.2,0x6b3a1a,IX+2.55,2.35,18.85);box(5.3,.3,.2,0x6b3a1a,IX,4.55,18.85);
-  box(2.1,3.9,.12,0x9a6a3a,IX-2.02,2.0,17.87).rotation.y=1.4;box(2.1,3.9,.12,0x9a6a3a,IX+2.02,2.0,17.87).rotation.y=1.74;
+  box(4.2,.04,5.2,0xdcd5c6,IX,1.02,16.9);
+  box(.25,4.5,.25,0x6b3a1a,IX-2.35,3.25,19.15);box(.25,4.5,.25,0x6b3a1a,IX+2.35,3.25,19.15);box(4.95,.3,.28,0x6b3a1a,IX,5.35,19.15);
   box(5,.4,1,0xa77a4c,IX,.2,-10.3);box(3,.4,1,0xa77a4c,IX-9,.2,-10.3);
 
   var c0=scene.children.length;
-  // Corridor (room at x = 800), 16 m long: cream tile floor, maroon runner, timber walls, ceiling lights
-  flat(6.8,16,0xd9cfba,CX,0,1);flat(.5,16,0xb7a98c,CX-2.9,0,2);flat(.5,16,0xb7a98c,CX+2.9,0,2);flat(1.8,15.6,0x7a5260,CX,0,2);
-  box(.4,5,16,0x8a5a34,CX+3.4,2.5,0);box(.4,5,7.8,0x8a5a34,CX-3.4,2.5,-4.1);box(.4,5,3.8,0x8a5a34,CX-3.4,2.5,6.1);box(.4,.9,4.4,0x6e4426,CX-3.4,4.55,2);
-  for(var gz=-7.5;gz<=7.5;gz+=1.5){box(.05,4.4,.08,0x6e4426,CX+3.18,2.4,gz);if(gz<-.8||gz>4.6)box(.05,4.4,.08,0x6e4426,CX-3.18,2.4,gz);}
-  ceil(6.8,.3,16,0xefeee9,CX,5.15,0);[-4,0,4].forEach(function(z0){glow(.9,.05,.9,0xffffff,CX,4.98,z0);});
-  box(7,5,.4,0xeeeeea,CX,2.5,-8.2);box(7,5,.4,0xdcd5c6,CX,2.5,8.2);
+  // Corridor (room at x = 800), 18.4 m long: cream tile floor, maroon runner, timber walls, ceiling lights, and full west plaza exit
+  flat(6.8,18.4,0xd9cfba,CX,1.1,1);flat(.5,18.4,0xb7a98c,CX-2.9,1.1,2);flat(.5,18.4,0xb7a98c,CX+2.9,1.1,2);flat(1.8,17.8,0x7a5260,CX,1.1,2);
+  box(.4,5,18.4,0x8a5a34,CX+3.4,2.5,1.1);box(.4,5,7.8,0x8a5a34,CX-3.4,2.5,-4.1);box(.4,5,6.2,0x8a5a34,CX-3.4,2.5,7.3);box(.4,.9,4.4,0x6e4426,CX-3.4,4.55,2);
+  for(var gz=-7.5;gz<=9.6;gz+=1.5){box(.05,4.4,.08,0x6e4426,CX+3.18,2.4,gz);if(gz<-.8||gz>4.6)box(.05,4.4,.08,0x6e4426,CX-3.18,2.4,gz);}
+  ceil(6.8,.3,18.4,0xefeee9,CX,5.15,1.1);[-4,0,4,8].forEach(function(z0){glow(.9,.05,.9,0xffffff,CX,4.98,z0);});
+  box(7,5,.4,0xeeeeea,CX,2.5,-8.2);var audExWall=box(7,5,.4,0xe6dfd2,CX,2.5,10.3),audExRec=lastRec;
   box(.12,3.9,2.1,0x9a6a3a,CX-3.2+1.03,2.0,-.2+.18).rotation.y=1.4;box(.12,3.9,2.1,0x9a6a3a,CX-3.2+1.03,2.0,4.2-.18).rotation.y=1.74;
   // white patterned wall at the end with a quiet DevFest mark
   label('',5.4,3.7,'#f4f5f6','#202124',10,0,CX,2.7,-7.94,function(g,c){var W=c.width,H=c.height,i,j;g.fillStyle='#e3e5e8';for(j=0;j<9;j++)for(i=0;i<16;i++)if((i*7+j*3)%5<2)g.fillRect(i*W/16+W/80,j*H/9+H/45,W/40,H/22);
@@ -838,9 +954,39 @@ function main(){
   box(5.6,.08,.08,0xf1f1ee,CX,.15,-7.9);
   box(3,1.05,.8,0xf3f1ec,CX,.525,-6.8);box(3.1,.06,.9,0x7a5a3a,CX,1.07,-6.8);
   var CT=-Math.PI/2;for(var ci=c0;ci<scene.children.length;ci++){var cm=scene.children[ci],lx=cm.position.x,lz=cm.position.z;cm.position.set(IX-(lz-2),cm.position.y+1,19.4+(lx-(CX-3.4)));cm.rotation.y+=CT;}
+  audExRec.x=IX-8.3;audExRec.y=3.5;audExRec.z=22.8;audExRec.w=.4;audExRec.d=7;
+  box(.22,4.05,.24,0xf4efe6,IX-8.06,3.02,20.52);box(.22,4.05,.24,0xf4efe6,IX-8.06,3.02,25.08);box(.24,.24,4.8,0xf4efe6,IX-8.06,5.02,22.8);
+  box(1.5,.04,3.4,0x3b3532,IX-7.15,1.03,22.8);
+  lastRec=audExRec;
+  panel(4.36,3.92,Math.PI/2,IX-8.06,2.98,22.8,96,function(g,c){
+    var W=c.width,H=c.height,sky=g.createLinearGradient(0,0,0,H*.54);
+    sky.addColorStop(0,'#7ab6ec');sky.addColorStop(1,'#d5eaf8');g.fillStyle=sky;g.fillRect(0,0,W,H);
+    g.fillStyle='#a9684b';g.fillRect(W*.06,H*.30,W*.42,H*.22);g.fillStyle='#cfc8b8';g.fillRect(W*.06,H*.29,W*.42,H*.03);
+    g.fillStyle='#2f7d3b';[[.18,.44,.15],[.52,.41,.16],[.84,.43,.15]].forEach(function(t){g.beginPath();g.ellipse(W*t[0],H*t[1],W*t[2],H*.13,0,0,7);g.fill();});
+    g.fillStyle='#78b856';g.fillRect(0,H*.52,W,H*.12);
+    g.fillStyle='#d8c7a3';g.fillRect(0,H*.60,W,H*.40);
+    g.fillStyle='#1a6ddf';g.beginPath();g.moveTo(W*.43,H*.62);g.lineTo(W*.57,H*.62);g.lineTo(W*.68,H);g.lineTo(W*.32,H);g.closePath();g.fill();
+    g.fillStyle='#ffffff';for(var di=0;di<4;di++)g.fillRect(W*.488,H*(.65+di*.085),W*.024,H*.045);
+    g.fillStyle='rgba(195,226,245,.32)';g.fillRect(0,0,W*.22,H);g.fillRect(W*.78,0,W*.22,H);
+    g.strokeStyle='#ece7dc';g.lineWidth=Math.max(4,W*.016);g.strokeRect(2,2,W-4,H-4);
+    g.beginPath();g.moveTo(W*.22,0);g.lineTo(W*.22,H);g.moveTo(W*.78,0);g.lineTo(W*.78,H);g.moveTo(0,H*.18);g.lineTo(W,H*.18);g.stroke();
+    g.fillStyle='#b8a48a';g.fillRect(W*.19,H*.46,W*.016,H*.14);g.fillRect(W*.794,H*.46,W*.016,H*.14);
+  },.35);
+  box(.12,.64,2.7,0x16221c,IX-8.02,5.48,22.8);label('EXIT  ·  CAMPUS PLAZA',2.56,.52,'#1e9e5a','#ffffff',150,Math.PI/2,IX-7.95,5.48,22.8);
   solid(IX+8.8,22.8,.8,3);
   stand(IX+9.5,22.0,-1.57,{shirt:GB,oy:1});stand(IX+9.5,23.7,-1.57,{shirt:0xf4f4f0,oy:1});stand(IX+3,23.2,1.57,{pack:true,oy:1});
-  function fy(){if(P.x>300&&P.x<500){if(P.z>=14)return 1;if(P.z<=-6)return 0;return (P.z+6)/20;}return 0;}
+  function sstep(a,b,v){var t=clamp((v-a)/(b-a),0,1);return t*t*(3-2*t);}
+  function fy(x,z){
+    if(x===undefined){x=P.x;z=P.z;}
+    if(x>300&&x<500){if(z>=14)return 1;if(z<=-6)return 0;return (z+6)/20;}
+    if(x<300){
+      if(Math.abs(z+58.8)<3.2&&x>15.2&&x<18.2)return .32*sstep(15.2,17.1,x);
+      if(x>EX-3&&x<EX+3&&z>IT.z0-5&&z<IT.z0+.5)return .72*sstep(IT.z0-4.7,IT.z0-2.5,z);
+      if(z>IT.z0-4.6&&z<IT.z0-2.4&&x>=EX-13.2&&x<=EX-2.8)return .72*sstep(EX-13.2,EX-2.8,x);
+      if(Math.abs(z+8)<6.8&&x<-45.8&&x>-52.5)return .36*sstep(-45.8,-47.8,x);
+    }
+    return 0;
+  }
 
   // Route dressing: quiet white pole banners, accent under the arch, banners at the entrance, two planters
   function pole(x,z,ry,h){box(.1,h,.1,0x4b5360,x,h/2,z);label('DevFest\n2026',1.1,2.5,'#ffffff','#202124',170,ry,x,h-1.4,z+(ry?0:.08),function(g,c){chev(g,c.width/2,c.height*.2,c.width*.1);GC.forEach(function(k,i){g.fillStyle='#'+k.toString(16);g.fillRect(i*c.width/4,c.height*.95,c.width/4,c.height*.05);});});solid(x,z,.5,.5);}
@@ -1048,7 +1194,22 @@ function main(){
     [-1,1].forEach(function(sd){box(.4,1.1,32,0xf4f1e8,X+sd*6.8,.55,0);box(.5,.35,32,0xb4472e,X+sd*6.8,.18,0);box(.6,.14,32,0xc0562f,X+sd*6.8,1.17,0);
       [8.5,3.5,-1.5,-6.5].forEach(function(z){box(.9,.5,3.6,0xe3a620,X+sd*5.95,.35,z);box(.2,.8,3.6,0xd9981a,X+sd*6.35,.85,z);});
       for(var tz=-12;tz<=12;tz+=6){var m=new THREE.Mesh(icoGeo,mat(LEAF[(tz+12)/6%4|0]));m.position.set(X+sd*10,3.6,tz);m.scale.set(3.2,3,3.2);scene.add(m);box(.8,3,.8,0x5b3f2a,X+sd*10,1.5,tz);}});
-    box(14.4,5.4,.4,0xf3efe8,X,2.7,16.4);box(14.4,5.4,.4,0xe9e2d3,X,2.7,-18);
+    var mExWall=box(14.4,5.4,.4,0xf3efe8,X,2.7,16.4),mExRec=lastRec;box(14.4,5.4,.4,0xe9e2d3,X,2.7,-18);
+    box(.75,4.35,.32,0x8c3a2c,X-4.32,2.18,16.14);box(.75,4.35,.32,0x8c3a2c,X+4.32,2.18,16.14);box(9.4,.32,.36,0xb4472e,X,4.38,16.14);
+    lastRec=mExRec;
+    panel(8.2,4.2,Math.PI,X,2.14,16.18,96,function(g,c){
+      var W=c.width,H=c.height,sky=g.createLinearGradient(0,0,0,H*.52);
+      sky.addColorStop(0,'#7ab6ec');sky.addColorStop(1,'#d8ecf9');g.fillStyle=sky;g.fillRect(0,0,W,H);
+      g.fillStyle='#2f7d3b';[[.15,.38,.16],[.46,.36,.15],[.82,.37,.17]].forEach(function(t){g.beginPath();g.ellipse(W*t[0],H*t[1],W*t[2],H*.15,0,0,7);g.fill();});
+      g.fillStyle='#78b856';g.fillRect(0,H*.48,W,H*.14);
+      g.fillStyle='#b26a45';g.fillRect(0,H*.58,W,H*.42);
+      g.fillStyle='#2a2a2c';g.fillRect(W*.485,H*.22,W*.03,H*.44);
+      [.26,.34,.42,.50].forEach(function(yy,i){var tw=W*(.09-i*.012);g.fillRect(W*.5-tw/2,H*yy,tw,H*.028);});
+      g.fillStyle='#8c3a2c';g.fillRect(W*.22,0,W*.045,H);g.fillRect(W*.735,0,W*.045,H);
+      g.fillStyle='#c55a38';g.fillRect(0,0,W,H*.08);
+      g.fillStyle='#232325';g.fillRect(0,H*.90,W,H*.10);g.fillStyle='#e0a82a';g.fillRect(W*.22,H*.90,W*.06,H*.10);g.fillRect(W*.72,H*.90,W*.06,H*.10);
+    },.35);
+    box(2.6,.62,.12,0x16221c,X,4.82,16.14);label('EXIT  ·  COURTYARD',2.46,.5,'#1e9e5a','#ffffff',150,Math.PI,X,4.82,16.06);
     // sanctum: grey marble front with a glass door, red shloka board above, framed notices
     box(2.5,4,4.4,0xb1b4af,X-2.45,2.3,-15.6);box(2.5,4,4.4,0xb1b4af,X+2.45,2.3,-15.6);box(2.4,1.2,4.4,0xb1b4af,X,3.7,-15.6);box(7.4,.1,4.4,0xb1b4af,X,4.35,-15.6);
     box(2.4,2.8,.2,0x5a2a1e,X,1.7,-17.7);box(.14,2.8,.2,0x1f3a34,X-1.27,1.7,-13.35);box(.14,2.8,.2,0x1f3a34,X+1.27,1.7,-13.35);box(2.66,.14,.2,0x1f3a34,X,3.17,-13.35);
@@ -1105,81 +1266,214 @@ function main(){
     glow(.12,.12,.12,0xffcf6a,X-1.0,.6,-15.4);glow(.12,.12,.12,0xffcf6a,X+1.0,.6,-15.4);
     // brass bell on its rope in front of the door, steel donation box with a small Ganesh, stool and chalkboard
     box(.03,1.7,.03,0x222222,X-.2,4.55,-12.1);
-    var bl=new THREE.Mesh(new THREE.CylinderGeometry(.18,.3,.38,16),new THREE.MeshLambertMaterial({color:0xc9972f}));bl.position.set(X-.2,3.5,-12.1);scene.add(bl);box(.06,.14,.06,0x8a6a20,X-.2,3.28,-12.1);
+    var mandirBellMesh=new THREE.Mesh(new THREE.CylinderGeometry(.18,.3,.38,16),new THREE.MeshLambertMaterial({color:0xc9972f}));mandirBellMesh.position.set(X-.2,3.5,-12.1);scene.add(mandirBellMesh);window.__mbell=mandirBellMesh;box(.06,.14,.06,0x8a6a20,X-.2,3.28,-12.1);
     box(1.2,.5,.9,0xe8b94a,X+3.5,.55,-13);box(1.0,.9,.7,0x9aa0a6,X+3.5,1.25,-13);box(.9,.02,.5,0x7a7f85,X+3.5,1.0,-12.64);sph(X+3.5,1.95,-13,.14,.2,.12,0xc9552b);
     box(.5,.08,.5,0x3a2418,X+4.7,1.55,-12.8);[[-.2,-.2],[.2,-.2],[-.2,.2],[.2,.2]].forEach(function(q){box(.06,1.5,.06,0x3a2418,X+4.7+q[0],.75,-12.8+q[1]);});
     var cb=box(1.2,1.7,.06,0x262626,X-3.9,1.15,-12.9);cb.rotation.x=-.14;box(1.3,.06,.1,0x3a2418,X-3.9,.3,-12.7);
     ML('',1.0,1.5,'#262626','#e6e6e6',10,0,X-3.9,1.17,-12.83,function(g,c){var W=c.width,H=c.height;g.fillStyle='#e6e6e6';g.font='600 '+W*.14+'px "Noto Sans Devanagari","Nirmala UI",Mangal,sans-serif';g.textAlign='center';g.fillText('ॐ',W/2,H*.15);for(var r=0;r<6;r++)g.fillRect(W*.15,H*.25+r*H*.1,W*(.4+(r%3)*.15),3);});
     stand(X+5.9,3.5,-1.57,{shirt:0x1a6ddf,oy:.35});stand(X-5.9,-1.5,1.57,{shirt:0xe0392d,oy:.35});
   })();
-  function mandirDoors(){
-    if(P.x<300&&P.x<-50.4&&P.x>-52.4&&Math.abs(P.z+8)<2.4){P.x=MX;P.z=14.6;P.yaw=0;}
-    else if(P.x>900&&P.z>15.5){P.x=-45.5;P.z=-8;P.yaw=-Math.PI/2;}
-  }
+  var mandirBell=window.__mbell||null,bellT=0;
 
-  // Door logic: plaza entrance <-> corridor <-> hall
-  function aud(){
-    mandirDoors();
-    if(P.x<300&&P.x>dx0-1.3&&P.x<dx0+3&&Math.abs(P.z+58.8)<2.6){P.x=IX-4.6;P.z=22.8;P.yaw=-Math.PI/2;}
-    else if(P.x>300&&P.x<500&&P.z>19.6&&P.x<IX-5.4){P.x=dx0-3.4;P.z=-58.8;P.yaw=Math.PI/2;}
-  }
+  // Subtle glowing portal threshold markers at the 3 building entrances & exits
+  glow(.22,.05,3.6,0x4285f4,dx0-2.1,.16,-58.8);
+  glow(2.8,.05,.22,0x34a853,EX,.75,IT.z0-2.45);
+  glow(.22,.05,3.2,0xfbbc04,-46.05,.22,-8);
 
-  /* ---------- Player, stops and camera modes ---------- */
+  /* ---------- Checkpoints, portals & game HUD ---------- */
   var STOPS=[
-    {out:1,f:1,x:3,z:67,yaw:0,t:"Jnanaganga gate",b:"Start at the Jnanaganga gate of KLS GIT. Walk in through the black gates and go straight. No turns for a while, easy.",s:false},
-    {out:1,f:1,x:3,z:30,yaw:0,t:"The garden road",b:"Keep going straight on the wide road. Lawns, flower beds and a fountain on your left. Follow the blue stripe on the ground, it's your guide to the auditorium.",s:false},
-    {out:1,f:1,x:6,z:2,yaw:.35,t:"Lawn and the IT block",b:"Still straight. Red leafy plants on your left, sponsor boards and the white IT block on your right.",s:false},
-    {out:1,f:1,x:6,z:-13.5,yaw:.15,t:"Signpost: Main, IT, Auditorium",b:"Main building is ahead on the left, with the Gogte name board lawn (B1). On your right, the red-earth bed (B2) holds the partner boards. Follow the signpost to the auditorium.",s:true},
-    {out:1,f:1,x:-2.5,z:-36.5,yaw:-.14,t:"The auditorium lane",b:"The IT lane splits off to the right. Skip it, stay on the blue stripe and walk under the DevFest arch. Auditorium is at the end.",s:true},
-    {out:1,f:1,x:1,z:-57,yaw:-Math.PI/2,t:"Turn right",b:"Top of the lane, take a right. The auditorium lobby is straight ahead and registration is on the plaza.",s:true},
-    {out:1,f:1,x:4,z:-58.8,yaw:-Math.PI/2,t:"Auditorium entrance",b:"The Silver Jubilee Auditorium, home of DevFest Belagavi 2026. Shutter's up, doorway's open. Go in!",s:true},
-    {x:IX-4,z:22.8,yaw:-Math.PI/2,t:"The entrance corridor",b:"White wall at the end with the DevFest 2026 mark, registration desk right below it. Just follow the maroon runner.",s:true},
-    {x:IX,z:12.5,yaw:0,t:"Inside the auditorium",b:"Wood-panelled hall with warm amber lights, super cozy. Plain white screen and two plants on stage, dark seats in two blocks with the aisle in the middle.",s:false},
-    {out:1,x:-.4,z:-48.4,yaw:-1.92,t:"After the talks: back to the junction",b:"Talks done? Walk back down the lane. At the first junction by the Main building, turn left onto the red-earth lane between the auditorium and IT blocks.",s:false},
-    {out:1,x:27,z:-39.4,yaw:-1.5,t:"The lane to the IT block",b:"Auditorium block on your left, white IT block on your right. Keep going to the end, the IT entrance is marked E on the photo.",s:false},
-    {out:1,x:EX+.5,z:-42.3,yaw:Math.PI,t:"IT block entrance",b:"Glass tower above, cream wall with a round window on your left, ramp with a steel rail on your right. A few maroon steps lead up to the glass doors.",s:false},
-    {out:1,x:EX,z:IT.z0-4.1,yaw:Math.PI,t:"Up the steps",b:"Climb the steps. The round window frames the courtyard and the glass doors open straight into the lobby.",s:false},
-    {x:ITX,z:-11.6,yaw:Math.PI,t:"Inside the lobby",b:"Lobby vibes: coffered white ceiling, mezzanine at the far end, and the desk right ahead under the IT BLOCK board. Lifts are on your right.",s:false},
-    {x:ITX+3,z:-6.6,yaw:-Math.PI/2,t:"Glass wall and the orange mural",b:"Curved glass wall on your left looks out on the courtyard. Next to it, the orange wall with the big triangle mural. Lowkey the best photo spot.",s:false},
-    {x:ITX-3,z:5.2,yaw:Math.PI,t:"The check-in desk",b:"Check in here and get the plan: Track A (meet the speakers) and Track B (code challenge), both from 3:45 pm. Main walk ends here. The Mandir visit after this is optional.",s:true},
-    {out:1,o:1,x:EX-8,z:-39.4,yaw:Math.PI/2,t:"Optional: walk to the Mandir",b:"Mandir is optional, no pressure. Head out of the IT block, turn left onto the red-earth lane, then follow the saffron stripe west.",s:false},
-    {out:1,o:1,x:27,z:-39.4,yaw:Math.PI/2,t:"Along the IT lane",b:"Keep heading west. IT block on your left, auditorium block on your right. Follow the saffron stripe.",s:false},
-    {out:1,o:1,x:5,z:-39.4,yaw:Math.PI/2,t:"Cross the junction",b:"Go straight across the blue stripe crossing, don't turn. The B2 partner boards bed is on your left and the B1 name-board lawn is just past it.",s:false},
-    {out:1,o:1,x:-24,z:-35.2,yaw:Math.PI/2,t:"Grey path along the Main building",b:"The lane turns into a grey paved path with the solar-roofed Main building on your right. Straight till its entrance.",s:false},
-    {out:1,o:1,x:-41,z:-35.5,yaw:Math.PI/2+.5,t:"Main building entrance: turn left",b:"At the Main building entrance the path bends left onto a cobbled road. Follow the saffron stripe round the corner, the Mandir arch is just ahead.",s:false},
-    {out:1,o:1,x:-46,z:-34.2,yaw:Math.PI,t:"The Mandir arch",b:"Walk under the maroon arch. The cobbled road runs south between flowerpots and lamps, garden lawn on your left.",s:false},
-    {out:1,o:1,x:-46,z:-24,yaw:Math.PI,t:"Along the garden",b:"Keep straight. Garden lawn on your left, flower beds and benches along the brick path. The Mandir sign is ahead.",s:false},
-    {out:1,o:1,x:-42,z:-9,yaw:Math.PI/2,t:"The Mandir courtyard",b:"Cobbled courtyard with a tiered black stone lamp tower, big shade trees and the open pillared hall with white half-walls and red bands. Very peaceful.",s:false},
-    {out:1,o:1,x:-46.2,z:-8,yaw:Math.PI/2,t:"Mandir entrance",b:"Shoes off on the black mat, up the black-and-yellow steps, then walk in between the red pillars.",s:false},
-    {o:1,x:MX,z:14,yaw:0,t:"Inside the Mandir hall",b:"Long, cool hall: polished maroon floor, red pillars, yellow benches on both sides and a stepped white ceiling. The shrine is at the far end.",s:false},
-    {o:1,x:MX,z:-6,yaw:0,t:"The Ganesh shrine",b:"Grey marble shrine with a glass door and a red board with the Ganesh shloka in gold. Notice boards on both sides, chalkboard on the left, donation box and stool on the right.",s:false},
-    {o:1,x:MX,z:-9.6,yaw:0,t:"Lord Ganesh and the bell",b:"Behind the glass, the Ganesh murti sits on a pedestal with a golden arch, red cloth, marigold garland and brass lamps. The brass bell hangs by the door.",s:false}
+    {out:1,f:1,x:3,z:67,yaw:0,t:"Jnanaganga gate",b:"Walk in through the black gates with WASD (or the joystick) and follow the blue stripe straight ahead.",s:false},
+    {out:1,f:1,x:3,z:30,yaw:0,t:"The garden road",b:"Keep heading north along the blue stripe. Lawns, flower beds and a fountain line your left.",s:false},
+    {out:1,f:1,x:6,z:2,yaw:.35,t:"Lawn and the IT block",b:"Sponsor boards and the white IT block are on your right. Keep following the blue stripe.",s:false},
+    {out:1,f:1,x:6,z:-13.5,yaw:.15,t:"Signpost: Main, IT, Auditorium",b:"Main building is ahead on the left; partner boards sit on the right. Stay on the blue stripe toward the Auditorium.",s:true},
+    {out:1,f:1,x:-2.5,z:-36.5,yaw:-.14,t:"The auditorium lane",b:"Pass the IT lane junction and walk straight under the Silver Jubilee Auditorium arch.",s:true},
+    {out:1,f:1,x:1,z:-57,yaw:-Math.PI/2,t:"Auditorium plaza",b:"Turn right onto the plaza. Registration is ahead and the Auditorium doorway is open.",s:true},
+    {out:1,f:1,x:13,z:-58.8,yaw:-Math.PI/2,t:"Auditorium entrance",b:"Silver Jubilee Auditorium, home of DevFest Belagavi 2026. Walk through the doors or press Enter to step inside!",s:true},
+    {x:IX-4,z:22.8,yaw:-Math.PI/2,t:"The entrance corridor",b:"Follow the maroon runner east past registration, then turn left into the main hall.",s:true},
+    {x:IX,z:12.5,yaw:0,t:"Inside the auditorium",b:"Wood-panelled hall with warm amber lights and the DevFest 2026 stage. After exploring, head back out the corridor to visit the IT Block.",s:false},
+    {out:1,x:-.4,z:-48.4,yaw:-1.92,t:"Junction & Photo Booth",b:"Head south to the crossing and turn east onto the red-earth lane between the Auditorium and IT blocks.",s:false},
+    {out:1,x:27,z:-39.4,yaw:-1.5,t:"The lane to the IT block",b:"Auditorium block on your left, white IT block on your right. Continue east to the glass tower entrance.",s:false},
+    {out:1,x:EX+.5,z:-42.3,yaw:Math.PI,t:"IT block entrance",b:"Climb the maroon steps up to the glass doors (or press Enter) to enter the IT Block lobby.",s:false},
+    {out:1,x:EX,z:IT.z0-4.1,yaw:Math.PI,t:"IT block porch",b:"Step through the open glass doors or press Enter to enter the lobby.",s:false},
+    {x:ITX,z:-11.0,yaw:Math.PI,t:"Inside the IT block lobby",b:"Coffered ceiling, lifts on your right, orange geometric mural on your left, and the check-in desk straight ahead.",s:false},
+    {x:ITX+3,z:-6.6,yaw:-Math.PI/2,t:"Glass wall and the orange mural",b:"Curved glass wall overlooking the courtyard beside the signature triangle mural.",s:false},
+    {x:ITX-3,z:5.2,yaw:Math.PI,t:"The check-in desk",b:"Track A (speaker lounge) & Track B (code challenge) check-in! Press Enter at the desk for your pass, or exit north to take the optional saffron walk to the Mandir.",s:true},
+    {out:1,o:1,x:EX-8,z:-39.4,yaw:Math.PI/2,t:"Optional: walk to the Mandir",b:"Follow the saffron stripe west along the lane, across the main junction and past the Main building.",s:false},
+    {out:1,o:1,x:27,z:-39.4,yaw:Math.PI/2,t:"Along the IT lane",b:"Keep heading west along the saffron stripe.",s:false},
+    {out:1,o:1,x:5,z:-39.4,yaw:Math.PI/2,t:"Cross the junction",b:"Go straight west across the blue stripe crossing onto the grey paved path.",s:false},
+    {out:1,o:1,x:-24,z:-35.2,yaw:Math.PI/2,t:"Path along the Main building",b:"Solar-roofed Main building on your right. Continue west to its entrance.",s:false},
+    {out:1,o:1,x:-41,z:-35.5,yaw:Math.PI/2+.5,t:"Main building corner",b:"Follow the saffron stripe left onto the cobbled road toward the maroon Mandir arch.",s:false},
+    {out:1,o:1,x:-46,z:-34.2,yaw:Math.PI,t:"The Mandir arch",b:"Walk south under the maroon arch along the cobbled garden lane.",s:false},
+    {out:1,o:1,x:-46,z:-24,yaw:Math.PI,t:"Along the garden",b:"Garden lawn, flower beds and benches on your left; Mandir courtyard ahead.",s:false},
+    {out:1,o:1,x:-42,z:-9,yaw:Math.PI/2,t:"The Mandir courtyard",b:"Cobbled courtyard with the black stone deepmala lamp tower and open pillared pavilion.",s:false},
+    {out:1,o:1,x:-46.2,z:-8,yaw:Math.PI/2,t:"Mandir entrance",b:"Step up between the red laterite pillars or press Enter to step inside the Mandir hall.",s:false},
+    {o:1,x:MX,z:13.0,yaw:0,t:"Inside the Mandir hall",b:"Polished maroon floor, red pillars and yellow benches leading north to the Ganesh shrine.",s:false},
+    {o:1,x:MX,z:-6,yaw:0,t:"The Ganesh shrine",b:"Grey marble sanctum with the golden Ganesh shloka board above. Walk closer to ring the brass bell!",s:false},
+    {o:1,x:MX,z:-9.6,yaw:0,t:"Sri Vidya Ganapati & Bell",b:"Press Enter to ring the brass bell before the Sri Vidya Ganapati murti.",s:false}
   ];
-  var MSTART=0;STOPS.forEach(function(st,i){if(st.o&&!MSTART)MSTART=i;});   // first optional stop: out of the IT block, along the lane to the Mandir
   STOPS.forEach(function(s){if(s.f)s.rs=nearestS(s.x,s.z);});
   var FOLLOWI=[];STOPS.forEach(function(s,i){if(s.f)FOLLOWI.push(i);});
-  var P={x:STOPS[0].x,z:STOPS[0].z,yaw:0,pitch:0,h:1.65,bob:0},tween=null,keys={},joy={x:0,y:0},idx=0;
-  var mode='walk',orb=0,fc={x:0,y:3,z:60,yaw:0,pitch:-.2};
+  var P={x:STOPS[0].x,z:STOPS[0].z,yaw:0,pitch:.03,h:1.65,bob:0},keys={},joy={x:0,y:0},idx=0,vx=0,vz=0;
+  var mode='walk',orb=0,fc={x:0,y:3,z:60,yaw:0,pitch:-.2},appStage='gate',modalState='';
+  var lastCam={x:STOPS[0].x,y:1.65,z:STOPS[0].z,pitch:.03,yaw:0},camBlend=null,fovBoost=0;
+  var REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $=function(i){return document.getElementById(i);};
+  var ov=$('fade'),cardEl=$('card'),promptEl=$('prompt'),promptTxt=$('prompttxt'),questEl=$('quest'),questTxt=$('questtxt');
+  var toastEl=$('toast'),toastBadge=$('toastbadge'),toastTxt=$('toasttxt'),tourFill=$('tourfill'),tourModal=$('tourmodal'),gateCard=$('gatecard'),brandH=$('brandh');
+  var doorCool=0,activeAct=null,questStage=0,visited={aud:false,it:false,desk:false,mandir:false};
 
-  function apply(){
-    if(mode==='orbit'){
-      var R=140,hg=90,cxm=-4,czm=-38,ox=cxm+Math.sin(orb)*R,oz=czm+Math.cos(orb)*R;
-      var ddx=cxm-ox,ddz=czm-oz;cam.position.set(ox,hg,oz);cam.rotation.set(Math.atan2(-hg+2,Math.hypot(ddx,ddz)),Math.atan2(-ddx,-ddz),0);return;
-    }
-    if(mode==='follow'){cam.position.set(fc.x,fc.y,fc.z);cam.rotation.set(fc.pitch,fc.yaw,0);return;}
-    cam.position.set(P.x,P.h+fy()+P.bob,P.z);cam.rotation.set(clamp(P.pitch+lookP,-1.3,1.3),P.yaw+lookY,0);
-  }
+  function setStage(st){appStage=st;document.documentElement.dataset.stage=st;}
+  setStage('gate');
+
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
-  function doors(){
-    aud();
-    var ez=IT.z0;
-    if(P.x<300&&P.x>EX-2.3&&P.x<EX+2.3&&P.z>ez-1.5&&P.z<ez+1){P.x=ITX;P.z=-11.6;P.yaw=Math.PI;}
-    else if(P.x>500&&P.z<-13.3&&Math.abs(P.x-ITX)<2.3){P.x=EX;P.z=ez-4.6;P.yaw=0;}
+  function angd(a,b){return ((a-b+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;}
+  function spaceOf(x){return x>900?3:x>500?2:x>300?1:0;}
+  var mobK=0,baseFov=70;
+  function syncViewMetrics(){
+    var asp=(innerWidth||1280)/Math.max(1,innerHeight||720);
+    mobK=clamp((1.12-asp)/.60,0,1);
+    baseFov=70+28*mobK;
+  }
+  function eyeH(){
+    if(mobK<.01)return P.h;
+    var sp=spaceOf(P.x);
+    return P.h+(sp===0?1.55:sp===1?.90:sp===2?(P.z>6.5?.55:1.15):.80)*mobK;
+  }
+  function pitchBias(){
+    if(mobK<.01)return 0;
+    var sp=spaceOf(P.x);
+    return (sp===0?-.11:sp===3?-.06:-.08)*mobK;
+  }
+  function gateZ(){return STOPS[0].z+7*mobK;}
+  syncViewMetrics();
+
+  /* ---------- Zero-delay same-frame building portals ---------- */
+  var ez=IT.z0;
+  var PORTALS=[
+    {s:0,ax:16.2,az:-58.8,aw:1.15,ad:2.5,px:14.6,pz:-58.8,pr:4.8,face:-Math.PI/2,label:'Enter Silver Jubilee Auditorium',
+     to:{x:IX-4.0,z:22.8,yaw:-Math.PI/2,stop:7}},
+    {s:1,ax:IX-5.9,az:22.8,aw:.85,ad:2.8,px:IX-4.4,pz:22.8,pr:3.2,face:Math.PI/2,label:'Exit to Campus Plaza',
+     to:{x:13.4,z:-58.8,yaw:Math.PI/2,stop:6}},
+    {s:0,ax:EX,az:ez-1.5,aw:2.2,ad:.85,px:EX,pz:ez-3.7,pr:4.8,face:Math.PI,label:'Enter IT Block Lobby',
+     to:{x:ITX,z:-10.8,yaw:Math.PI,stop:13}},
+    {s:2,ax:ITX,az:-12.5,aw:2.3,ad:.75,px:ITX,pz:-11.0,pr:3.4,face:0,label:'Exit to IT Lane',
+     to:{x:EX,z:ez-5.0,yaw:0,stop:11}},
+    {s:0,ax:-48.1,az:-8,aw:1.2,ad:2.6,px:-45.6,pz:-8,pr:4.6,face:Math.PI/2,label:'Enter Sri Vidya Ganapati Mandir',
+     to:{x:MX,z:12.8,yaw:0,stop:25}},
+    {s:3,ax:MX,az:14.4,aw:3.2,ad:.75,px:MX,pz:13.0,pr:3.4,face:Math.PI,label:'Exit to Mandir Courtyard',
+     to:{x:-44.2,z:-8,yaw:-Math.PI/2,stop:23}}
+  ];
+
+  function portalFlash(){
+    if(REDUCE||!ov)return;
+    ov.style.transition='none';ov.style.opacity='.46';void ov.offsetWidth;
+    ov.style.transition='opacity .22s cubic-bezier(.16,1,.3,1)';ov.style.opacity='0';
+  }
+  function updateQuest(){
+    var sp=spaceOf(P.x);
+    if(sp===1){visited.audCor=true;if(P.z<16)visited.aud=true;}
+    if(sp===2){visited.it=true;if(P.z>2)visited.desk=true;}
+    if(sp===3)visited.mandir=true;
+    var ns=!visited.audCor?0:!visited.aud?1:!visited.it?2:!visited.desk?3:!visited.mandir?4:5;
+    if(ns!==questStage||questEl.dataset.init!=='1'){
+      questStage=ns;questEl.dataset.init='1';
+      var qMsg=[
+        'Follow the blue stripe to the Auditorium',
+        'Walk east & turn left through the open doors into the Hall',
+        'Explore the stage, then exit & take the red lane to IT Block',
+        'Head to the IT Block Check-In Desk ahead',
+        'Optional: Follow the saffron stripe west to the Mandir',
+        'Campus Quest Complete \u2713 Free-roam anywhere!'
+      ][ns];
+      questTxt.textContent=qMsg;
+      questEl.className='quest'+(ns===4?' opt':ns===5?' done':'');
+    }
+  }
+  function enterPortal(d){
+    if(doorCool>0)return;
+    doorCool=.42;
+    if(mode!=='walk')setMode('walk');
+    camBlend=null;
+    P.x=d.x;P.z=d.z;P.yaw=d.yaw;P.pitch=d.pitch||0;P.bob=0;
+    lastCam.x=P.x;lastCam.y=eyeH()+fy()+P.bob;lastCam.z=P.z;lastCam.pitch=P.pitch+pitchBias();lastCam.yaw=P.yaw;
+    vx=appStage==='free'?-Math.sin(d.yaw)*1.9:0;
+    vz=appStage==='free'?-Math.cos(d.yaw)*1.9:0;
+    fovBoost=3.4;
+    portalFlash();
+    if(d.stop!==undefined)show(d.stop,false,true);
+    if(appStage==='free')updateQuest();
+  }
+  function ringBell(){
+    bellT=2.4;
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext;
+      if(AC){
+        var ac=window.__ac||(window.__ac=new AC()),t0=ac.currentTime;
+        [528,1056,1588].forEach(function(fr,i){
+          var o=ac.createOscillator(),g=ac.createGain();
+          o.type=i?'sine':'triangle';o.frequency.value=fr;
+          g.gain.setValueAtTime([.16,.08,.04][i],t0);
+          g.gain.exponentialRampToValueAtTime(.0008,t0+1.7-i*.3);
+          o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+1.75);
+        });
+      }
+    }catch(e){}
+  }
+
+  function poseFor(m){
+    if(m==='orbit'){
+      var R=140+38*mobK,hg=90+18*mobK,cxm=-4,czm=-38,ox=cxm+Math.sin(orb)*R,oz=czm+Math.cos(orb)*R,ddx=cxm-ox,ddz=czm-oz;
+      return {x:ox,y:hg,z:oz,pitch:Math.atan2(-hg+2,Math.hypot(ddx,ddz)),yaw:Math.atan2(-ddx,-ddz)};
+    }
+    if(m==='follow')return {x:fc.x,y:fc.y,z:fc.z,pitch:fc.pitch,yaw:fc.yaw};
+    return {x:P.x,y:eyeH()+fy()+P.bob,z:P.z,pitch:clamp(P.pitch+pitchBias(),-1.3,1.3),yaw:P.yaw};
+  }
+  function startCamBlend(dur,arc){
+    if(REDUCE){camBlend=null;return;}
+    camBlend={x0:lastCam.x,y0:lastCam.y,z0:lastCam.z,p0:lastCam.pitch,w0:lastCam.yaw,t:0,d:dur||.85,arc:arc||0};
+  }
+  function apply(dt){
+    var tg=poseFor(mode),x=tg.x,y=tg.y,z=tg.z,pt=tg.pitch,yw=tg.yaw;
+    if(camBlend){
+      camBlend.t+=dt||.016;
+      var u=Math.min(1,camBlend.t/camBlend.d),e=u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2,ey=e;
+      if(camBlend.arc>0)ey=1-Math.pow(1-e,1.75);
+      else if(camBlend.arc<0)ey=Math.pow(e,1.75);
+      x=camBlend.x0+(x-camBlend.x0)*e;
+      y=camBlend.y0+(y-camBlend.y0)*ey;
+      z=camBlend.z0+(z-camBlend.z0)*e;
+      pt=camBlend.p0+(pt-camBlend.p0)*e;
+      yw=camBlend.w0+angd(yw,camBlend.w0)*e;
+      if(u>=1)camBlend=null;
+    }
+    lastCam.x=x;lastCam.y=y;lastCam.z=z;lastCam.pitch=pt;lastCam.yaw=yw;
+    cam.position.set(x,y,z);cam.rotation.set(pt,yw,0);
+    if(Math.abs(fovBoost)>.01){
+      fovBoost*=Math.exp(-(dt||.016)*8);
+      if(Math.abs(fovBoost)<=.01)fovBoost=0;
+    }
+    var tfov=baseFov+fovBoost;
+    if(Math.abs(cam.fov-tfov)>.02){cam.fov=tfov;cam.updateProjectionMatrix();}
+  }
+  function checkAutoPortals(){
+    if(doorCool>0)return false;
+    var sp=spaceOf(P.x);
+    for(var i=0;i<PORTALS.length;i++){
+      var p=PORTALS[i];
+      if(p.s===sp&&Math.abs(P.x-p.ax)<p.aw&&Math.abs(P.z-p.az)<p.ad){
+        enterPortal(p.to);return true;
+      }
+    }
+    return false;
   }
   function collide(){
-    doors();
+    if(checkAutoPortals())return;
     if(P.x>900){P.x=clamp(P.x,MX-6.4,MX+6.4);P.z=clamp(P.z,-12,15.3);}else if(P.x>500){P.x=clamp(P.x,ITX-14,ITX+13.4);P.z=clamp(P.z,-13.4,13.4);}
-    else if(P.x>300){if(P.z>19.6){P.x=clamp(P.x,IX-5.9,IX+9.4);P.z=clamp(P.z,19.8,25.8);}else if(P.z>17.8&&Math.abs(P.x-IX)<2.2){P.x=clamp(P.x,IX-2.2,IX+2.2);}else{P.x=clamp(P.x,IX-13.2,IX+13.2);P.z=clamp(P.z,-18,17.8);}}
+    else if(P.x>300){
+      if(Math.abs(P.x-IX)<1.85&&P.z>17.2&&P.z<20.4)P.x=clamp(P.x,IX-1.85,IX+1.85);
+      else if(P.z>19.1){P.x=clamp(P.x,IX-7.2,IX+9.4);P.z=clamp(P.z,19.95,25.6);}
+      else{P.x=clamp(P.x,IX-13.2,IX+13.2);P.z=clamp(P.z,-18,17.7);}
+    }
     else{P.x=clamp(P.x,-125,108);P.z=clamp(P.z,-118,82);}
     var r=.55;
     for(var i=0;i<solids.length;i++){
@@ -1188,209 +1482,368 @@ function main(){
     }
   }
 
-  /* ---------- UI ---------- */
-  var $=function(i){return document.getElementById(i);};
-  var pips=$('pips');
-  STOPS.forEach(function(s,i){var b=document.createElement('button');b.setAttribute('aria-label','Stop '+(i+1)+': '+s.t);b.onclick=function(){go(i);};pips.appendChild(b);});
-  function show(i){
-    var s=STOPS[i];idx=i;
-    var cd=$('card');cd.classList.remove('swap');void cd.offsetWidth;cd.classList.add('swap');
-    $('step').textContent='Stop '+(i+1)+' of '+STOPS.length;
-    $('title').textContent=s.t;$('body').textContent=s.b;$('tag').hidden=!(s.s||s.o);$('tag').textContent=s.o?'Optional \u00b7 Mandir visit':'Suggested setup';
-    Array.prototype.forEach.call(pips.children,function(b,j){b.setAttribute('aria-current',j===i?'true':'false');});
-    $('prev').disabled=i===0;$('next').disabled=i===STOPS.length-1;
-    $('prev').style.opacity=i===0?.5:1;$('next').style.opacity=i===STOPS.length-1?.5:1;
+  /* ---------- Game HUD, proximity discovery & context actions ---------- */
+  function setCardMin(min){
+    cardEl.classList.toggle('min',!!min);
+    var ck=$('cardk');if(ck)ck.textContent=min?'ENTER \u00b7 INFO':'ENTER \u00b7 HIDE';
   }
-  function setMode(m){
-    mode=m;$('followbtn').textContent=m==='follow'?'Stop following':'Follow the walker';
-    $('followbtn').className=m==='follow'?'on':'';$('orbit').className=m==='orbit'?'on':'';
-    $('orbit').textContent=m==='orbit'?'Back on the ground':'Orbit';
-  }
-  /* ---------- Smooth travel: glide along the real paths, dissolve through doors ---------- */
-  var REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ov=$('fade'),ovx=ov.getContext('2d');
-  var tgt=0,pending=null,lookY=0,lookP=0,jumpReq=null,bobPh=0;
-  function angd(a,b){return ((a-b+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;}
-  function spaceOf(x){return x>900?3:x>500?2:x>300?1:0;}
-  var RP=mkPoly(ROUTE),MW=mkPoly(MWALK);
-  function smp(pl,s0,s1,st){var o=[],n=Math.max(1,Math.ceil(Math.abs(s1-s0)/(st||2))),k,q;for(k=0;k<=n;k++){q=pl.at(s0+(s1-s0)*k/n);o.push([q.x,q.z]);}return o;}
-  function nps(pl,x,z){var best=1e9,bs=0,k,t,d,a=pl.pts,g=pl.sg;
-    for(k=0;k<g.length;k++){t=(x-a[k][0])*g[k].ux+(z-a[k][1])*g[k].uz;t=Math.max(0,Math.min(g[k].l,t));
-      d=Math.hypot(x-(a[k][0]+g[k].ux*t),z-(a[k][1]+g[k].uz*t));if(d<best){best=d;bs=g[k].s0+t;}}return bs;}
-  function dens(p,st){var o=[p[0]],k,a,b,n,j,l;for(k=1;k<p.length;k++){a=p[k-1];b=p[k];l=Math.hypot(b[0]-a[0],b[1]-a[1]);n=Math.max(1,Math.ceil(l/st));for(j=1;j<=n;j++)o.push([a[0]+(b[0]-a[0])*j/n,a[1]+(b[1]-a[1])*j/n]);}return o;}
-  function chaik(p){if(p.length<3)return p;var o=[p[0]],k,a,b;for(k=0;k<p.length-1;k++){a=p[k];b=p[k+1];o.push([a[0]*.75+b[0]*.25,a[1]*.75+b[1]*.25]);o.push([a[0]*.25+b[0]*.75,a[1]*.25+b[1]*.75]);}o.push(p[p.length-1]);return o;}
-  function dedupe(p){var o=[p[0]],k;for(k=1;k<p.length;k++)if(Math.hypot(p[k][0]-o[o.length-1][0],p[k][1]-o[o.length-1][1])>.03)o.push(p[k]);return o;}
-  function S(j){return [STOPS[j].x,STOPS[j].z];}
-  function rsOf(j){return nps(RP,STOPS[j].x,STOPS[j].z);}
-  function msOf(j){return nps(MW,STOPS[j].x,STOPS[j].z);}
-  var DOORX=dx0-3.4;                                   // just outside the auditorium door
-  /* Ops for walking from stop k to stop k+1. w = walk through points. c = door cut (c = where you arrive going forward, r = where you arrive going back). */
-  function legs(k){
-    var A=S(k),B=S(k+1),PI=Math.PI;
-    if(k<=5)return [{w:[A].concat(smp(RP,rsOf(k),rsOf(k+1),2),[B])}];
-    switch(k){
-      case 6:return [{w:[A,[16.3,-58.8]]},{c:[IX-5.6,22.8,-PI/2],r:[DOORX,-58.8,PI/2]},{w:[[IX-5.6,22.8],B]}];
-      case 7:return [{w:[A,[IX-1.4,22.7],[IX-.3,22.0],[IX,21.4],B]}];
-      case 8:return [{w:[A,[IX,20.6],[IX-.9,22.2],[IX-3,22.8],[IX-5.6,22.8]]},{c:[DOORX,-58.8,PI/2],r:[IX-5.6,22.8,-PI/2]},
-                     {w:[[DOORX,-58.8]].concat(smp(RP,nps(RP,DOORX,-58.8),rsOf(9),2),[B])}];
-      case 9:return [{w:[A].concat(smp(RP,rsOf(9),sJ2,2),smp(ITP,0,nps(ITP,B[0],B[1]),2),[B])}];
-      case 10:return [{w:[A].concat(smp(ITP,nps(ITP,A[0],A[1]),ITP.L-5,2),[[54,-39.6],[56.3,-41.1],B])}];
-      case 11:return [{w:[A,[57.3,-39.9],B]}];
-      case 12:return [{w:[A,[EX,-35.5]]},{c:[ITX,-12.8,PI],r:[EX,-35.5,0]},{w:[[ITX,-12.8],B]}];
-      case 13:return [{w:[A,[ITX+1.2,-9.2],B]}];
-      case 14:return [{w:[A,[ITX+.8,-1.5],[ITX-1.7,2.8],B]}];
-      case 15:return [{w:[A,[ITX-1.6,-2.5],[ITX,-9.5],[ITX,-12.9]]},{c:[EX,-36.4,0],r:[ITX,-12.9,PI]},{w:[[EX,-36.4],[54,-38.1],B]}];
-      case 22:return [{w:[A,[-46,-15.5],[-44.6,-11.4],B]}];
-      case 23:return [{w:[A,[-44.8,-8.4],B]}];
-      case 24:return [{w:[A,[-50.1,-8]]},{c:[MX,15.2,0],r:[-49.4,-8,-PI/2]},{w:[[MX,15.2],B]}];
-      case 25:case 26:return [{w:[A,B]}];
+  function show(i,noAnim,expand){
+    var s=STOPS[i],prev=idx;idx=i;
+    if(expand)setCardMin(false);
+    var cin=$('cardin');
+    if(cin&&!noAnim&&i!==prev){
+      cin.classList.remove('swap-f','swap-b');void cin.offsetWidth;
+      cin.classList.add(i>=prev?'swap-f':'swap-b');
     }
-    return [{w:[A].concat(smp(MW,msOf(k),msOf(k+1),2),[B])}];      // 16..21: along the saffron walk
+    var sp=spaceOf(s.x),zone=['CAMPUS','AUDITORIUM','IT BLOCK','MANDIR'][sp];
+    $('step').textContent=zone+' \u00b7 CHECKPOINT '+(i+1)+'/'+STOPS.length;
+    $('title').textContent=s.t;$('body').textContent=s.b;$('tag').hidden=!(s.s||s.o);$('tag').textContent=s.o?'Optional \u00b7 Mandir quest':'Key landmark';
   }
-  function revOps(ops){
-    var out=[],k,o;
-    for(k=ops.length-1;k>=0;k--){o=ops[k];if(o.c)out.push({c:o.r||o.c});else out.push({w:o.w.slice().reverse()});}
-    for(k=0;k<out.length-1;k++)if(out[k].c&&out[k+1].w)out[k+1].w[0]=[out[k].c[0],out[k].c[1]];
-    return out;
-  }
-  function snap(){try{ovx.drawImage(canvas,0,0,ov.width,ov.height);}catch(e){}}
-  function dissolve(d,push){
-    if(REDUCE)return;
-    ov.style.transformOrigin='50% 52%';
-    ov.style.transition='none';ov.style.opacity='1';ov.style.transform='scale(1)';void ov.offsetWidth;
-    ov.style.transition='opacity '+(d||1)+'s cubic-bezier(.4,0,.2,1)'+(push?',transform '+(d||1)*1.15+'s cubic-bezier(.3,.1,.3,1)':'');
-    ov.style.opacity='0';if(push)ov.style.transform='scale('+push+')';
-  }
-  function prof(u){var a=.25,v=1/(1-a);return u<a?v*u*u/(2*a):u>1-a?1-v*(1-u)*(1-u)/(2*a):v*(u-a/2);}
-  function pathAt(it,l){
-    var c=it.cum,j=it.j||0,a,b,sl,t;
-    while(j>0&&c[j]>l)j--;while(j<c.length-2&&c[j+1]<l)j++;it.j=j;
-    a=it.pts[j];b=it.pts[j+1];sl=c[j+1]-c[j];t=sl>0?(l-c[j])/sl:0;
-    return {x:a[0]+(b[0]-a[0])*t,z:a[1]+(b[1]-a[1])*t,tx:sl>0?(b[0]-a[0])/sl:0,tz:sl>0?(b[1]-a[1])/sl:0};
-  }
-  function startTravel(i,from){
-    var s=STOPS[i],f=STOPS[from],k,o,last=null,items=[],total=0,n=Math.abs(i-from),ops=null;
-    tgt=i;lookY=lookP=0;
-    if(REDUCE){P.x=s.x;P.z=s.z;P.yaw=s.yaw;P.pitch=0;P.bob=0;return;}
-    if(spaceOf(P.x)===spaceOf(f.x)&&Math.hypot(P.x-f.x,P.z-f.z)<14&&n<=3){
-      ops=[];
-      if(i>from){for(k=from;k<i;k++)ops=ops.concat(legs(k));}
-      else if(i<from){for(k=from-1;k>=i;k--)ops=ops.concat(revOps(legs(k)));}
-      else ops=[{w:[[f.x,f.z],[s.x,s.z]]}];
-      if(Math.hypot(P.x-f.x,P.z-f.z)>.4&&ops[0].w)ops[0]={w:[[P.x,P.z]].concat(ops[0].w)};
+  function setMode(m){mode=m;}
+  function updateProximity(){
+    var sp=spaceOf(P.x),bestI=-1,bestD=1e9,curD=spaceOf(STOPS[idx].x)===sp?Math.hypot(P.x-STOPS[idx].x,P.z-STOPS[idx].z):1e9;
+    for(var i=0;i<STOPS.length;i++){
+      if(spaceOf(STOPS[i].x)!==sp)continue;
+      var d=Math.hypot(P.x-STOPS[i].x,P.z-STOPS[i].z);
+      if(d<bestD){bestD=d;bestI=i;}
     }
-    if(!ops){jumpReq=i;return;}                                   // far away: dissolve straight there
-    for(k=0;k<ops.length;k++){
-      o=ops[k];
-      if(o.c){items.push({c:o.c});last=null;}
-      else if(last){last.w=last.w.concat(o.w);}
-      else{last={w:o.w.slice()};items.push(last);}
+    if(bestI>=0&&bestI!==idx&&bestD<13.5&&bestD<curD-2.2){
+      show(bestI,false,true);
     }
-    items.forEach(function(it){
-      if(!it.w)return;
-      var p=dedupe(chaik(chaik(dens(it.w,2)))),cum=[0],q;
-      if(p.length<2)p=[p[0],p[0]];
-      for(q=1;q<p.length;q++)cum.push(cum[q-1]+Math.hypot(p[q][0]-p[q-1][0],p[q][1]-p[q-1][1]));
-      it.pts=p;it.cum=cum;it.len=cum[cum.length-1];it.j=0;total+=it.len;
-    });
-    var lw=null,hE=s.yaw,pp;for(k=items.length-1;k>=0;k--)if(items[k].w){lw=items[k];break;}
-    if(lw&&lw.pts.length>1&&lw.len>.3){pp=lw.pts;hE=Math.atan2(-(pp[pp.length-1][0]-pp[pp.length-2][0]),-(pp[pp.length-1][1]-pp[pp.length-2][1]));}
-    tween={items:items,i:0,base:0,total:total,t:0,D:clamp(Math.max(total/3.1,(Math.abs(angd(s.yaw,hE))+Math.abs(angd(s.yaw,P.yaw)))/1.6),1.7,8),stop:i,sy:s.yaw,tsc:1,tst:1,bs:0,snap:false};
-  }
-  function moveInput(){return keys.w||keys.s||keys.a||keys.d||keys.arrowup||keys.arrowdown||Math.abs(joy.x)>.1||Math.abs(joy.y)>.1;}
-  function abortTravel(){P.yaw+=lookY;P.pitch=clamp(P.pitch+lookP,-1.1,1.1);lookY=lookP=0;P.bob=0;tween=null;pending=null;tgt=idx;}
-  function finishTravel(){
-    var s=STOPS[tween.stop];
-    P.x=s.x;P.z=s.z;P.yaw+=angd(s.yaw,P.yaw)+lookY;P.pitch=clamp(P.pitch+lookP,-1.1,1.1);lookY=lookP=0;P.bob=0;
-    tween=null;
-    if(pending!==null){var p=pending;pending=null;startTravel(p,tgt);}
-  }
-  function stepTravel(dt){
-    var tw=tween,px=P.x,pz=P.z,cutNow=false,it,u,s,l,q,la,hx,hz,hd,rem,bl,w,zz,k,spd;
-    tw.tsc+=(tw.tst-tw.tsc)*(1-Math.exp(-dt*6));
-    tw.t+=dt*tw.tsc;u=Math.min(1,tw.t/tw.D);s=prof(u)*tw.total;
-    for(;;){
-      it=tw.items[tw.i];if(!it)break;
-      if(it.c){P.x=it.c[0];P.z=it.c[1];tw.i++;cutNow=true;dissolve(1.9,1.14);tw.slowT=2.2;continue;}
-      if(s>tw.base+it.len+1e-6&&tw.i<tw.items.length-1){tw.base+=it.len;tw.i++;continue;}
-      break;
+    updateQuest();
+    // Evaluate context [ENTER] action prompt
+    var act=null;
+    if(mode==='orbit'){
+      act={txt:'Return to Ground',fn:toggleOrbit};
+    }else if(mode==='follow'){
+      act={txt:'Resume Free Walk',fn:toggleFollow};
+    }else{
+      for(var k=0;k<PORTALS.length;k++){
+        var p=PORTALS[k];
+        if(p.s!==sp)continue;
+        var pd=Math.hypot(P.x-p.px,P.z-p.pz);
+        if(pd<p.pr&&(p.face===undefined||pd<2.1||Math.cos(angd(P.yaw,p.face))>-.2)){
+          act={txt:p.label,fn:(function(dest){return function(){enterPortal(dest);};})(p.to)};
+          break;
+        }
+      }
+      if(!act){
+        if(sp===1&&P.z>19.2&&Math.hypot(P.x-IX,P.z-21.2)<3.0&&Math.cos(P.yaw)>.25){
+          act={txt:'Step into Main Hall',fn:function(){P.x=IX;P.z=15.2;P.yaw=0;vx=vz=0;startCamBlend(.42,0);show(8,false,true);updateQuest();}};
+        }else if(sp===1&&P.z<=19.2&&P.z>13.5&&Math.abs(P.x-IX)<3.2&&Math.cos(P.yaw)<-.25){
+          act={txt:'Step out to Corridor',fn:function(){P.x=IX;P.z=21.6;P.yaw=Math.PI/2;vx=vz=0;startCamBlend(.42,0);show(7,false,true);}};
+        }else if(sp===3&&P.z<-7.2){
+          act={txt:'Ring the Mandir Bell \ud83d\udd14',fn:ringBell};
+        }else if((sp===2&&Math.hypot(P.x-(ITX-3),P.z-9.5)<5.2)||(sp===0&&Math.hypot(P.x-10,P.z+62)<4.5)){
+          act={txt:'Check In \u00b7 Claim DevFest Pass',fn:function(){if(window.__openPass)window.__openPass();}};
+        }
+      }
     }
-    it=tw.items[tw.i];hd=P.yaw;
-    if(it&&it.w){
-      l=clamp(s-tw.base,0,it.len);q=pathAt(it,l);P.x=q.x;P.z=q.z;
-      la=pathAt(it,Math.min(it.len,l+2.4));hx=la.x-q.x;hz=la.z-q.z;
-      if(hx*hx+hz*hz<.04){hx=q.tx;hz=q.tz;}
-      if(hx*hx+hz*hz>1e-6)hd=Math.atan2(-hx,-hz);else hd=P.yaw;
-      tw.snap=!cutNow&&tw.items[tw.i+1]&&tw.items[tw.i+1].c&&(tw.base+it.len-s<7);
+    activeAct=act;
+    if(act){
+      promptTxt.textContent=act.txt;
+      promptEl.classList.add('on');
+    }else{
+      promptEl.classList.remove('on');
     }
-    if(pending===null){                                   // ease down to a gentle walk at every doorway, then pick the pace back up
-      if(tw.slowT>0)tw.slowT-=dt;
-      tw.tst=(tw.snap||tw.slowT>0)?.5:1;
-    }
-    rem=tw.total-s;bl=Math.min(6,tw.total*.8);w=0;
-    if(tw.total<.6)w=1;else if(rem<bl){zz=1-rem/bl;w=zz*zz*(3-2*zz);}
-    var dyw=angd(hd+angd(tw.sy,hd)*w,P.yaw)*(1-Math.exp(-dt*(3.5+6*w*w))),mx=(2.6+4*w)*dt;if(w>0)mx=Math.max(mx,Math.abs(angd(tw.sy,P.yaw))/Math.max((1-u)*tw.D/tw.tsc,.05)*dt*2.2);P.yaw+=clamp(dyw,-mx,mx);
-    P.pitch+=(0-P.pitch)*(1-Math.exp(-dt*3));
-    if(!cutNow){spd=Math.hypot(P.x-px,P.z-pz)/Math.max(dt,.001);tw.bs+=(spd-tw.bs)*(1-Math.exp(-dt*8));}
-    bobPh+=dt*tw.bs*1.7;P.bob=Math.sin(bobPh)*.03*clamp(tw.bs/4.5,0,1);
-    k=Math.exp(-dt*.7);lookY*=k;lookP*=k;
-    if(u>=1)finishTravel();
   }
-  function go(i){
-    i=clamp(i,0,STOPS.length-1);
-    var from=tween?tgt:idx;
-    if(mode==='follow'){P.x=fc.x;P.z=fc.z;P.yaw=fc.yaw;P.pitch=0;from=idx;}
-    setMode('walk');show(i);
-    if(jumpReq!==null){jumpReq=i;tgt=i;return;}
-    if(tween){pending=i;tween.tst=3.2;return;}                     // finish the current glide quickly, then carry on
-    startTravel(i,from);
+  function triggerAction(){
+    if(document.getElementById('boot'))return;
+    if(activeAct){activeAct.fn();return;}
+    setCardMin(!cardEl.classList.contains('min'));
   }
+  promptEl.onclick=function(e){e.stopPropagation();if(activeAct)activeAct.fn();};
+  cardEl.onclick=function(){setCardMin(!cardEl.classList.contains('min'));};
+
   function toggleFollow(){
-    if(mode==='follow'){P.x=fc.x;P.z=fc.z;P.yaw=fc.yaw;P.pitch=0;P.h=1.65;setMode('walk');return;}
-    if(P.x>300){P.x=STOPS[0].x;P.z=STOPS[0].z;}
-    tween=null;pending=null;jumpReq=null;lookY=lookP=0;P.bob=0;walker.s=0;walker.hold=0;snapFollow();setMode('follow');
+    if(mode==='follow'){P.x=fc.x;P.z=fc.z;P.yaw=fc.yaw;P.pitch=0;P.h=1.65;vx=vz=0;setMode('walk');startCamBlend(.5,0);return;}
+    vx=vz=0;
+    if(lastCam.x<300){
+      var near=mode==='walk'&&Math.hypot(lastCam.x-guide.x,lastCam.z-guide.z)<42;
+      if(!near){walker.s=0;walker.hold=0;}
+      snapFollow();setMode('follow');
+      if(near||mode==='orbit')startCamBlend(.8,0);else portalFlash();
+    }else{
+      P.x=STOPS[0].x;P.z=STOPS[0].z;walker.s=0;walker.hold=0;snapFollow();setMode('follow');portalFlash();
+    }
   }
-  $('prev').onclick=function(){go(idx-1);};
-  $('next').onclick=function(){go(idx+1);};
-  $('followbtn').onclick=toggleFollow;var ARCH=0;STOPS.forEach(function(st,i){if(st.t==='The Mandir arch')ARCH=i;});
-  $('mandirbtn').onclick=function(){go(ARCH);};   // straight to the Mandir arch
-  $('helpbtn').onclick=function(){var on=$('help').classList.toggle('on');this.setAttribute('aria-expanded',on);};
-  $('orbit').onclick=function(){if(mode==='orbit'){setMode('walk');}else{if(mode==='follow'){P.x=fc.x;P.z=fc.z;P.yaw=fc.yaw;P.pitch=0;}setMode('orbit');}};
+  function toggleOrbit(){
+    if(mode==='orbit'){
+      setMode('walk');
+      if(P.x<300)startCamBlend(.95,-1);else portalFlash();
+      return;
+    }
+    if(mode==='follow'){P.x=fc.x;P.z=fc.z;P.yaw=fc.yaw;P.pitch=0;}
+    vx=vz=0;
+    if(lastCam.x<300){
+      var dxo=lastCam.x+4,dzo=lastCam.z+38;
+      orb=Math.hypot(dxo,dzo)>4?Math.atan2(dxo,dzo):lastCam.yaw;
+      setMode('orbit');startCamBlend(1.0,1);
+    }else{
+      setMode('orbit');portalFlash();
+    }
+  }
+  /* ---------- Guided Campus Tour Sequencer (Gate -> SJ Auditorium -> IT Block -> Optional Mandir -> Free Explore) ---------- */
+  var SIGN_POS=[-4.0,-30.5],SIGN_POSE={yaw:.48,pitch:.14};
+  var TOUR_MAIN=[
+    {w:[[3,67],[3,30],[5,4],[8,-11.9],[-6,-22.4],SIGN_POS],spd:6.2,quest:'Exploring KLS GIT Campus Road',
+     looks:[[0,0,.04],[.16,.65,.02],[.34,-.68,.05],[.54,.72,.06],[.74,-.62,.04],[.90,.42,.10],[1,0,.08]],endPose:SIGN_POSE},
+    {hold:5.0,yaw:SIGN_POSE.yaw,pitch:SIGN_POSE.pitch,quest:'Signboard · SJ Auditorium Schedule',
+     toast:{badge:'SJ Auditorium · 9:00 AM – 2:25 PM',text:'Registration & Speaker Sessions will happen here from 9:00 AM to 2:25 PM.'}},
+    {w:[SIGN_POS,[-1.5,-40.6],[2,-58.8],[15.8,-58.8]],spd:6.0,quest:'Walking to Silver Jubilee Auditorium',
+     looks:[[0,.35,.10],[.28,0,.08],[.58,.36,.04],[.84,-.25,.05],[1,0,.03]],endPose:{yaw:-Math.PI/2,pitch:.03}},
+    {portal:{x:IX-4.0,z:22.8,yaw:-Math.PI/2,stop:7}},
+    {w:[[IX-4.0,22.8],[IX,22.8],[IX,15.0],[IX,2.0]],spd:5.0,quest:'Entering Silver Jubilee Auditorium',
+     toast:{badge:'Silver Jubilee Auditorium',text:'Stepping inside the main hall for a 360° look around.'},
+     looks:[[0,0,0],[.28,-.22,0],[.55,0,.04],[1,0,.05]],endPose:{yaw:0,pitch:.05}},
+    {spin:6.5,deltaYaw:Math.PI*2,pitch:.05,quest:'SJ Auditorium · 360° Hall View',
+     toast:{badge:'360° View · SJ Auditorium',text:'Registration & Speaker Sessions · 9:00 AM – 2:25 PM.'}},
+    {spin:.75,deltaYaw:Math.PI,pitch:.02,quest:'Exiting SJ Auditorium'},
+    {w:[[IX,2.0],[IX,15.5],[IX,22.8],[IX-4.8,22.8]],spd:5.4,quest:'Exiting SJ Auditorium',looks:[[0,0,.02],[1,0,.02]],endPose:{yaw:Math.PI/2,pitch:.02}},
+    {portal:{x:13.4,z:-58.8,yaw:Math.PI/2,stop:6}},
+    {w:[[13.4,-58.8],[2,-58.8],[-1.5,-40.6],SIGN_POS],spd:6.5,quest:'Returning to Campus Signboard',
+     looks:[[0,0,.03],[.45,-.32,.04],[.80,.25,.06],[1,0,.10]],endPose:SIGN_POSE},
+    {hold:5.0,yaw:SIGN_POSE.yaw,pitch:SIGN_POSE.pitch,quest:'Signboard · IT Block Schedule',
+     toast:{badge:'IT Block · 3:45 PM – 6:15 PM',text:'Speaker Interaction & Code Challenge will happen in the IT Block from 3:45 PM to 6:15 PM.'}},
+    {w:[SIGN_POS,[-1.5,-40.6],[25,-39.2],[50,-38.6],[57,-38.2],[57,-35.0]],spd:6.4,quest:'Walking to IT Block',
+     looks:[[0,0,.05],[.28,.45,.04],[.56,-.48,.08],[.82,.32,.05],[1,0,.04]],endPose:{yaw:Math.PI,pitch:.04}},
+    {portal:{x:ITX,z:-10.8,yaw:Math.PI,stop:13}},
+    {w:[[ITX,-10.8],[ITX+3.2,-4.2],[ITX-1.5,2.5]],spd:4.4,quest:'Touring IT Block Lobby',
+     toast:{badge:'IT Block Lobby · 3:45 PM – 6:15 PM',text:'Courtyard glass wall, geometric mural & Check-In Desk for Speaker Interaction and Code Challenge.'},
+     looks:[[0,0,.02],[.38,1.02,.04],[.74,-.82,.04],[1,0,.05]],endPose:{yaw:Math.PI,pitch:.05}},
+    {spin:5.2,deltaYaw:Math.PI*2,pitch:.05,quest:'IT Block Lobby · Panoramic View',
+     toast:{badge:'IT Block Tour',text:'Track A (Speaker Interaction) & Track B (Code Challenge) · 3:45 PM – 6:15 PM.'}},
+    {spin:.75,deltaYaw:Math.PI,pitch:.02,quest:'Exiting IT Block Lobby'},
+    {w:[[ITX-1.5,2.5],[ITX,-4.5],[ITX,-11.0]],spd:5.0,quest:'Exiting IT Block Lobby',looks:[[0,0,.02],[1,0,.02]],endPose:{yaw:0,pitch:.02}},
+    {portal:{x:EX,z:ez-5.0,yaw:0,stop:11}},
+    {w:[[EX,ez-5.0],[50,-38.6],[25,-39.2],[-1.5,-40.6],SIGN_POS],spd:6.8,quest:'Returning to Campus Signboard',
+     looks:[[0,0,.03],[.38,-.38,.04],[.72,.38,.05],[1,0,.10]],endPose:SIGN_POSE}
+  ];
+  var TOUR_MANDIR=[
+    {w:[SIGN_POS,[-1.5,-40.6],[-17,-35.0],[-39,-34.5],[-46,-33.6],[-46,-20.0],[-46,-8.0],[-47.5,-8.0]],spd:6.2,
+     quest:'Optional Visit · Walking to Sri Vidya Ganapati Mandir',
+     looks:[[0,0,.04],[.22,-.52,.08],[.44,.48,.03],[.60,0,.10],[.76,-.58,.03],[.90,-.45,.04],[1,0,.04]],endPose:{yaw:Math.PI/2,pitch:.04}},
+    {portal:{x:MX,z:12.8,yaw:0,stop:25}},
+    {w:[[MX,12.8],[MX,2.0],[MX,-8.2]],spd:4.2,quest:'Inside Sri Vidya Ganapati Mandir',
+     toast:{badge:'Sri Vidya Ganapati Mandir',text:'Red laterite pillars, brass bell & Sri Vidya Ganapati sanctum.'},
+     looks:[[0,0,.02],[.35,.44,.02],[.68,-.44,.02],[1,0,.04]],endPose:{yaw:0,pitch:.04}},
+    {spin:5.6,deltaYaw:Math.PI*2,pitch:.03,bell:true,quest:'Sri Vidya Ganapati Mandir · 360° View',
+     toast:{badge:'Sri Vidya Ganapati Mandir',text:'Taking in the Mandir hall and sanctum before heading back outside.'}},
+    {spin:.75,deltaYaw:Math.PI,pitch:.02,quest:'Exiting Sri Vidya Ganapati Mandir'},
+    {w:[[MX,-8.2],[MX,3.0],[MX,12.8]],spd:4.8,quest:'Exiting Sri Vidya Ganapati Mandir',looks:[[0,0,.02],[1,0,.02]],endPose:{yaw:Math.PI,pitch:.02}},
+    {portal:{x:-44.2,z:-8.0,yaw:-Math.PI/2,stop:23}},
+    {hold:.9,yaw:-.65,pitch:.05,quest:'Mandir Courtyard'}
+  ];
+  var tour={list:null,i:0,t:0,s:0,poly:null,spinW0:0,paused:false,branch:''};
+  function smoothPts(pts){
+    var cur=pts;
+    for(var pass=0;pass<2;pass++){
+      if(cur.length<3)break;
+      var nx=[cur[0]];
+      for(var i=0;i<cur.length-1;i++){
+        var a=cur[i],b=cur[i+1],dx=b[0]-a[0],dz=b[1]-a[1],L=Math.hypot(dx,dz);
+        if(L<.01)continue;
+        var t=Math.min(.24,1.6/L);
+        if(i>0)nx.push([a[0]+dx*t,a[1]+dz*t]);
+        if(i<cur.length-2)nx.push([b[0]-dx*t,b[1]-dz*t]);
+      }
+      nx.push(cur[cur.length-1]);cur=nx;
+    }
+    return mkPoly(cur);
+  }
+  function evalLook(looks,u){
+    if(!looks||!looks.length)return [0,0];
+    if(u<=looks[0][0])return [looks[0][1],looks[0][2]];
+    for(var i=0;i<looks.length-1;i++){
+      var a=looks[i],b=looks[i+1];
+      if(u<=b[0]){
+        var t=(u-a[0])/Math.max(1e-5,b[0]-a[0]),e=.5-.5*Math.cos(Math.PI*t);
+        return [a[1]+(b[1]-a[1])*e,a[2]+(b[2]-a[2])*e];
+      }
+    }
+    var l=looks[looks.length-1];return [l[1],l[2]];
+  }
+  function setToast(info){
+    if(!toastEl)return;
+    if(!info){toastEl.classList.remove('on');return;}
+    toastBadge.textContent=info.badge||'';
+    toastTxt.textContent=info.text||'';
+    toastEl.classList.add('on');
+  }
+  function closeTourModal(){
+    modalState='';
+    if(tourModal)tourModal.classList.remove('on');
+  }
+  function openMandirPrompt(){
+    tour.paused=true;setToast(null);
+    modalState='mandir';
+    $('tmtag').textContent='Optional Campus Stop';
+    $('tmtag').className='gm-tag opt';
+    $('tmh').textContent='Visit Sri Vidya Ganapati Mandir?';
+    $('tmp').textContent='Would you like to optionally walk the saffron garden path past the Main Building to visit the campus Sri Vidya Ganapati Mandir?';
+    $('tmacts-mandir').hidden=false;$('tmacts-done').hidden=true;
+    tourModal.classList.add('on');
+    $('tmyes').focus({preventScroll:true});
+  }
+  function openVisitComplete(didMandir){
+    tour.paused=true;setToast(null);
+    if(tourFill)tourFill.style.transform='scaleX(1)';
+    questTxt.textContent='Guided Tour Complete \u2713';
+    questEl.className='quest done';
+    modalState='done';
+    $('tmtag').textContent='Tour Complete \u2713';
+    $('tmtag').className='gm-tag done';
+    $('tmh').textContent='Visit Complete!';
+    $('tmp').textContent=didMandir
+      ?'You have toured KLS GIT — SJ Auditorium (9:00 AM – 2:25 PM), IT Block (3:45 PM – 6:15 PM), and Sri Vidya Ganapati Mandir. Ready to roam freely?'
+      :'You have toured KLS GIT — SJ Auditorium (9:00 AM – 2:25 PM) and IT Block (3:45 PM – 6:15 PM). Ready to explore the campus on your own?';
+    $('tmacts-mandir').hidden=true;$('tmacts-done').hidden=false;
+    tourModal.classList.add('on');
+    $('tmfree').focus({preventScroll:true});
+  }
+  function beginTourStep(){
+    while(tour.list&&tour.i<tour.list.length){
+      var st=tour.list[tour.i];
+      setToast(st.toast||null);
+      if(st.quest){questTxt.textContent=st.quest;questEl.className='quest'+(tour.branch==='mandir'?' opt':'');}
+      if(st.portal){doorCool=0;enterPortal(st.portal);tour.i++;continue;}
+      tour.t=0;tour.s=0;
+      if(st.w){tour.poly=smoothPts(st.w);P.x=st.w[0][0];P.z=st.w[0][1];}
+      else if(st.spin){tour.spinW0=P.yaw;if(st.bell)ringBell();}
+      return;
+    }
+    setToast(null);
+    if(tour.branch==='main')openMandirPrompt();
+    else if(tour.branch==='mandir')openVisitComplete(true);
+  }
+  function runTourBranch(list,branch){
+    closeTourModal();
+    if(gateCard)gateCard.classList.remove('on');
+    clearKeys();joy.x=joy.y=0;vx=vz=0;setMode('walk');camBlend=null;
+    if(brandH)brandH.textContent='Guided Campus Tour';
+    setStage('tour');
+    tour.list=list;tour.i=0;tour.paused=false;tour.branch=branch;
+    beginTourStep();
+  }
+  function startTour(){
+    var gz0=gateZ();
+    TOUR_MAIN[0].w[0]=[STOPS[0].x,gz0];
+    P.x=STOPS[0].x;P.z=gz0;P.yaw=0;P.pitch=.03;P.bob=0;
+    lastCam.x=P.x;lastCam.y=eyeH()+fy();lastCam.z=P.z;lastCam.yaw=0;lastCam.pitch=.03+pitchBias();
+    if(spaceOf(P.x)!==0)portalFlash();
+    runTourBranch(TOUR_MAIN,'main');
+  }
+  function unlockFreeExplore(){
+    closeTourModal();setToast(null);
+    tour.list=null;tour.paused=false;
+    clearKeys();joy.x=joy.y=0;vx=vz=0;setMode('walk');
+    if(brandH)brandH.textContent='Campus Quest';
+    questEl.dataset.init='0';
+    setStage('free');
+    updateProximity();
+    try{dispatchEvent(new Event('resize'));}catch(e){}
+  }
+  $('starttour').onclick=startTour;
+  $('tmyes').onclick=function(){runTourBranch(TOUR_MANDIR,'mandir');};
+  $('tmno').onclick=function(){openVisitComplete(false);};
+  $('tmfree').onclick=unlockFreeExplore;
+  $('replaytour').onclick=function(){if($('help').classList.contains('on'))$('helpbtn').click();startTour();};
+
+  function updateTour(dt){
+    if(tour.paused||!tour.list||tour.i>=tour.list.length)return;
+    var st=tour.list[tour.i],frac=0;
+    if(st.w){
+      var pl=tour.poly,rem=pl.L-tour.s,ramp=Math.min(3.0,pl.L*.28);
+      var f=Math.min(1,(tour.s+.35)/ramp,(rem+.25)/ramp);
+      var curV=st.spd*(.28+.72*f);
+      tour.s=Math.min(pl.L,tour.s+curV*dt);
+      var u=pl.L>1e-4?tour.s/pl.L:1;frac=u;
+      var q=pl.at(tour.s),qa=pl.at(Math.min(pl.L,tour.s+1.8));
+      P.x=q.x;P.z=q.z;
+      var hdx=qa.x-q.x,hdz=qa.z-q.z;
+      var baseYaw=(hdx*hdx+hdz*hdz>1e-5)?Math.atan2(-hdx,-hdz):Math.atan2(-Math.sin(q.hd),-Math.cos(q.hd));
+      var lk=evalLook(st.looks,u),ty=baseYaw+lk[0],tp=lk[1];
+      if(st.endPose&&u>.78){
+        var eu=(u-.78)/.22,ee=.5-.5*Math.cos(Math.PI*eu);
+        ty+=angd(st.endPose.yaw,ty)*ee;tp+=(st.endPose.pitch-tp)*ee;
+      }
+      var dk=1-Math.exp(-dt*5.4);
+      P.yaw+=angd(ty,P.yaw)*dk;P.pitch+=(tp-P.pitch)*dk;
+      if(!REDUCE){bobPh+=dt*curV*1.65;P.bob=Math.sin(bobPh)*.022*clamp(curV/4.5,0,1);}
+      var sp=spaceOf(P.x);
+      if(sp===1){visited.audCor=true;if(P.z<16)visited.aud=true;}
+      if(sp===2){visited.it=true;if(P.z>2)visited.desk=true;}
+      if(sp===3)visited.mandir=true;
+      if(tour.s>=pl.L-1e-4){tour.i++;beginTourStep();}
+    }else if(st.hold){
+      tour.t+=dt;frac=Math.min(1,tour.t/st.hold);P.bob*=Math.exp(-dt*10);
+      var hk=1-Math.exp(-dt*6);
+      if(st.yaw!==undefined)P.yaw+=angd(st.yaw,P.yaw)*hk;
+      if(st.pitch!==undefined)P.pitch+=(st.pitch-P.pitch)*hk;
+      if(tour.t>=st.hold){tour.i++;beginTourStep();}
+    }else if(st.spin){
+      tour.t+=dt;var su=Math.min(1,tour.t/st.spin),se=.5-.5*Math.cos(Math.PI*su);frac=su;
+      P.bob*=Math.exp(-dt*10);
+      P.yaw=tour.spinW0+st.deltaYaw*se;
+      if(st.pitch!==undefined)P.pitch+=(st.pitch-P.pitch)*(1-Math.exp(-dt*5));
+      if(tour.t>=st.spin){P.yaw=angd(P.yaw,0);tour.i++;beginTourStep();}
+    }
+    if(tourFill&&tour.list)tourFill.style.transform='scaleX('+clamp((tour.i+frac)/tour.list.length,.02,1)+')';
+  }
+
+  $('helpbtn').onclick=function(){var on=$('help').classList.toggle('on');this.classList.toggle('on',on);this.setAttribute('aria-expanded',on);};
+
+  function clearKeys(){for(var k in keys)keys[k]=false;}
+  window.__clearKeys=clearKeys;
+  addEventListener('blur',clearKeys);
+  addEventListener('touchstart',function(){document.documentElement.classList.add('is-touch');},{once:true,passive:true});
 
   addEventListener('keydown',function(e){
+    if(document.getElementById('boot'))return;
     var k=e.key.toLowerCase();
-    if(k==='arrowright'&&!e.shiftKey){go(idx+1);return;}
-    if(k==='arrowleft'&&!e.shiftKey){go(idx-1);return;}
-    if(k==='h'){$('helpbtn').click();return;}
+    if(appStage!=='free'){
+      if(appStage==='gate'&&k==='enter'&&!e.repeat){e.preventDefault();startTour();return;}
+      if(modalState==='mandir'&&!e.repeat){
+        if(k==='enter'){e.preventDefault();runTourBranch(TOUR_MANDIR,'mandir');}
+        else if(k==='escape'){e.preventDefault();openVisitComplete(false);}
+      }else if(modalState==='done'&&k==='enter'&&!e.repeat&&document.activeElement!==$('tmreg')&&document.activeElement!==$('tmexit')){
+        e.preventDefault();unlockFreeExplore();
+      }
+      return;
+    }
+    if(k==='enter'){e.preventDefault();if(!e.repeat)triggerAction();return;}
+    if(k==='h'||k==='?'){$('helpbtn').click();return;}
+    if(k==='m'){$('mapbtn').click();return;}
     if(k==='f'){toggleFollow();return;}
-    if(k==='o'){$('orbit').click();return;}
+    if(k==='o'){toggleOrbit();return;}
+    if(k==='escape'&&$('help').classList.contains('on')){$('helpbtn').click();return;}
     keys[k]=true;if(k.indexOf('arrow')===0||k===' ')e.preventDefault();
   });
   addEventListener('keyup',function(e){keys[e.key.toLowerCase()]=false;});
-  var drag=null;
-  canvas.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);});
+  var drag=null,dragPid=-1;
+  canvas.addEventListener('pointerdown',function(e){if(appStage!=='free'||drag!==null)return;drag={x:e.clientX,y:e.clientY};dragPid=e.pointerId;try{canvas.setPointerCapture(e.pointerId);}catch(err){}});
   canvas.addEventListener('pointermove',function(e){
-    if(!drag)return;var dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag={x:e.clientX,y:e.clientY};
+    if(appStage!=='free'||!drag||e.pointerId!==dragPid)return;var dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag={x:e.clientX,y:e.clientY};
     if(mode==='orbit'){orb-=dx*.006;return;}
     if(mode==='follow')return;
-    if(tween){lookY-=dx*.005;lookP=clamp(lookP-dy*.004,-1,1);return;}
-    P.yaw-=dx*.005;P.pitch=clamp(P.pitch-dy*.004,-1.1,1.1);
+    P.yaw-=dx*.0052;P.pitch=clamp(P.pitch-dy*.0042,-1.15,1.15);
   });
-  canvas.addEventListener('pointerup',function(){drag=null;});
-  canvas.addEventListener('pointercancel',function(){drag=null;});
-  var jEl=$('joy'),kn=$('knob'),jd=false;
+  function endDrag(e){if(!e||e.pointerId===dragPid){drag=null;dragPid=-1;}}
+  canvas.addEventListener('pointerup',endDrag);
+  canvas.addEventListener('pointercancel',endDrag);
+  var jEl=$('joy'),kn=$('knob'),jd=false,jPid=-1;
   function jmove(e){var r=jEl.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
     var dx=(e.clientX-cx)/(r.width/2),dy=(e.clientY-cy)/(r.height/2),m=Math.hypot(dx,dy);if(m>1){dx/=m;dy/=m;}
-    joy.x=dx;joy.y=dy;kn.style.transform='translate('+dx*28+'px,'+dy*28+'px)';}
-  jEl.addEventListener('pointerdown',function(e){jd=true;jEl.setPointerCapture(e.pointerId);jmove(e);});
-  jEl.addEventListener('pointermove',function(e){if(jd)jmove(e);});
-  function jend(){jd=false;joy.x=joy.y=0;kn.style.transform='';}
+    joy.x=dx;joy.y=dy;kn.style.transform='translate('+dx*30+'px,'+dy*30+'px)';}
+  jEl.addEventListener('pointerdown',function(e){if(appStage!=='free')return;e.stopPropagation();jd=true;jPid=e.pointerId;try{jEl.setPointerCapture(e.pointerId);}catch(err){}jmove(e);});
+  jEl.addEventListener('pointermove',function(e){if(appStage==='free'&&jd&&e.pointerId===jPid)jmove(e);});
+  function jend(e){if(!e||e.pointerId===jPid){jd=false;jPid=-1;joy.x=joy.y=0;kn.style.transform='';}}
   jEl.addEventListener('pointerup',jend);jEl.addEventListener('pointercancel',jend);
 
-  /* ---------- Site plan ---------- */
+  /* ---------- Radar / Site plan ---------- */
   var planC=$('plan'),pg=planC.getContext('2d');
   function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
-  function drawPlan(){
+  function drawPlan(now){
     var W=planC.width,H=planC.height;
     function X(x){return (x+125)/235*W;}function Z(z){return (z+118)/200*H;}
     pg.clearRect(0,0,W,H);
@@ -1403,12 +1856,18 @@ function main(){
     ROUTE.forEach(function(r,i){if(i)pg.lineTo(X(r[0]),Z(r[1]));else pg.moveTo(X(r[0]),Z(r[1]));});pg.stroke();
     pg.strokeStyle='#fff';pg.lineWidth=1.2;pg.setLineDash([4,5]);pg.stroke();pg.setLineDash([]);
     pg.strokeStyle='#f08a1c';pg.lineWidth=3;pg.setLineDash([6,4]);pg.beginPath();MWALK.forEach(function(r,i){if(i)pg.lineTo(X(r[0]),Z(r[1]));else pg.moveTo(X(r[0]),Z(r[1]));});pg.stroke();pg.setLineDash([]);
-    STOPS.forEach(function(s,i){if(!s.out)return;pg.beginPath();pg.arc(X(s.x),Z(s.z),i===idx?5:3,0,7);pg.fillStyle=i===idx?css('--red'):css('--fg');pg.globalAlpha=i===idx?1:.55;pg.fill();pg.globalAlpha=1;});
+    // Pulsing quest objective marker on radar
+    var qTargets=[[16,-58.8],[16,-58.8],[EX,IT.z0-2],[EX,IT.z0-2],[-46,-8]];
+    if(questStage<5){
+      var qt=qTargets[questStage],pulse=5+Math.sin((now||0)*.006)*2.5;
+      pg.beginPath();pg.arc(X(qt[0]),Z(qt[1]),pulse+3,0,7);pg.strokeStyle=questStage===4?'#f08a1c':'#1a6ddf';pg.lineWidth=2;pg.globalAlpha=.65;pg.stroke();pg.globalAlpha=1;
+      pg.beginPath();pg.arc(X(qt[0]),Z(qt[1]),4.2,0,7);pg.fillStyle=questStage===4?'#f08a1c':'#34a853';pg.fill();pg.strokeStyle='#fff';pg.lineWidth=1.5;pg.stroke();
+    }
     pg.beginPath();pg.arc(X(guide.x),Z(guide.z),4,0,7);pg.fillStyle=css('--yellow');pg.fill();pg.strokeStyle='#14213d';pg.lineWidth=1.2;pg.stroke();
-    var vx=mode==='follow'?fc.x:P.x,vz=mode==='follow'?fc.z:P.z,vy=mode==='follow'?fc.yaw:P.yaw;
-    if(mode==='orbit'){vx=cam.position.x;vz=cam.position.z;vy=cam.rotation.y;}
-    if(vx>900){vx=-47;vz=-8;vy=Math.PI/2;}else if(vx>700){vx=16;vz=-58.8;vy=-Math.PI/2;}else if(vx>500){vx=EX;vz=IT.z0+1;vy=0;}else if(vx>300){vx=16;vz=-58.8;vy=-Math.PI/2;}
-    pg.save();pg.translate(X(vx),Z(vz));pg.rotate(-vy);pg.fillStyle=css('--red');pg.strokeStyle='#fff';pg.lineWidth=1.5;
+    var vx2=mode==='follow'?fc.x:P.x,vz2=mode==='follow'?fc.z:P.z,vy=mode==='follow'?fc.yaw:P.yaw;
+    if(mode==='orbit'){vx2=cam.position.x;vz2=cam.position.z;vy=cam.rotation.y;}
+    if(vx2>900){vx2=-47;vz2=-8;vy=Math.PI/2;}else if(vx2>700){vx2=16;vz2=-58.8;vy=-Math.PI/2;}else if(vx2>500){vx2=EX;vz2=IT.z0+1;vy=0;}else if(vx2>300){vx2=16;vz2=-58.8;vy=-Math.PI/2;}
+    pg.save();pg.translate(X(vx2),Z(vz2));pg.rotate(-vy);pg.fillStyle=css('--red');pg.strokeStyle='#fff';pg.lineWidth=1.5;
     pg.beginPath();pg.moveTo(0,-9);pg.lineTo(6,6);pg.lineTo(-6,6);pg.closePath();pg.fill();pg.stroke();pg.restore();
   }
 
@@ -1429,7 +1888,7 @@ function main(){
     var W=canvas.width,H=canvas.height;
     ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#bfdcf5';ctx.fillRect(0,0,W,H);
     var cx=cam.position.x,cy=cam.position.y,cz=cam.position.z,yaw=cam.rotation.y,pit=cam.rotation.x;
-    var cyw=Math.cos(yaw),syw=Math.sin(yaw),cp=Math.cos(pit),sp=Math.sin(pit),f=(H/2)/Math.tan(35*Math.PI/180);
+    var cyw=Math.cos(yaw),syw=Math.sin(yaw),cp=Math.cos(pit),sp=Math.sin(pit),f=(H/2)/Math.tan((baseFov*.5)*Math.PI/180);
     function tr(x,y,z){var dx=x-cx,dy=y-cy,dz=z-cz,x1=dx*cyw-dz*syw,z1=dx*syw+dz*cyw;return {x:x1,y:dy*cp+z1*sp,z:-dy*sp+z1*cp};}
     function pr(p){return {x:W/2+p.x*f/-p.z,y:H/2-p.y*f/-p.z};}
     function clip(poly){var out=[];for(var i=0;i<poly.length;i++){var a=poly[i],b=poly[(i+1)%poly.length],ai=a.z<-.1,bi=b.z<-.1;
@@ -1482,10 +1941,10 @@ function main(){
   /* ---------- Loop ---------- */
   function resize(){
     var w=innerWidth,h=innerHeight;
+    syncViewMetrics();
     if(renderer)renderer.setSize(w,h,false);
     else{var dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
-    cam.aspect=w/h;cam.updateProjectionMatrix();
-    ov.width=canvas.width;ov.height=canvas.height;
+    cam.fov=baseFov+fovBoost;cam.aspect=w/h;cam.updateProjectionMatrix();
   }
   addEventListener('resize',resize);resize();
 
@@ -1494,17 +1953,21 @@ function main(){
     fc.x=p.x-sn*6.5;fc.z=p.z-cs*6.5;fc.y=3.2;fc.yaw=Math.atan2(-sn*6.5,-cs*6.5);fc.pitch=-.2;
   }
   function updateFollow(dt){
-    var p=guide,sn=Math.sin(p.hd),cs=Math.cos(p.hd),k=1-Math.exp(-dt*3);
+    var p=guide,sn=Math.sin(p.hd),cs=Math.cos(p.hd),k=1-Math.exp(-dt*3.5);
     fc.x+=(p.x-sn*6.5-fc.x)*k;fc.z+=(p.z-cs*6.5-fc.z)*k;fc.y+=(3.2-fc.y)*k;
     var dx=p.x-fc.x,dz=p.z-fc.z,ty=Math.atan2(-dx,-dz),tp=Math.atan2(1.5-fc.y,Math.hypot(dx,dz));
-    var dyaw=((ty-fc.yaw+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI;fc.yaw+=dyaw*k;fc.pitch+=(tp-fc.pitch)*k;
+    fc.yaw+=angd(ty,fc.yaw)*k;fc.pitch+=(tp-fc.pitch)*k;
   }
-  var last=performance.now(),frame=0;
+  var last=performance.now(),frame=0,mapboxEl=$('mapbox'),bobPh=0;
   function loop(now){
     var dt=Math.min(.05,(now-last)/1000);last=now;
+    if(doorCool>0)doorCool=Math.max(0,doorCool-dt);
+    if(bellT>0&&mandirBell){bellT=Math.max(0,bellT-dt);mandirBell.rotation.z=Math.sin(bellT*14)*.28*(bellT/2.4);}
     // the guide walks the route on a loop
-    if(walker.hold>0){walker.hold-=dt;guide.sp=0;if(walker.hold<=0){walker.s=0;if(mode==='follow')snapFollow();}}
-    else{
+    if(walker.hold>0){
+      walker.hold-=dt;guide.sp=0;
+      if(walker.hold<=0){walker.s=0;if(mode==='follow'){snapFollow();portalFlash();}}
+    }else{
       walker.s+=dt*1.9;guide.sp=1.9;
       if(walker.s>=RLEN){walker.s=RLEN;walker.hold=3;guide.sp=0;}
     }
@@ -1514,34 +1977,69 @@ function main(){
       var q=w.poly?w.poly.at(w.s):routeAt(w.s);w.p.x=q.x+q.rx*w.lat;w.p.z=q.z+q.rz*w.lat;w.p.hd=w.dir>0?q.hd:q.hd+Math.PI;w.p.sp=w.speed;w.p.ph+=dt*w.speed*3.2;
     });
     people.forEach(function(p){if(!p.sp)p.ph+=dt*.6;placePerson(p);});
-    if(mode==='follow'){
+    if(appStage==='gate'){
+      P.x=STOPS[0].x;P.z=gateZ();P.yaw=0;P.pitch=.03;P.bob=0;
+    }else if(appStage==='tour'){
+      updateTour(dt);
+    }else if(mode==='follow'){
       updateFollow(dt);
       var ci=0;for(var fi=0;fi<FOLLOWI.length;fi++)if(walker.s>=STOPS[FOLLOWI[fi]].rs-1)ci=FOLLOWI[fi];if(ci!==idx)show(ci);
-    }else if(mode==='orbit'){orb+=dt*.12;}
-    else if(tween){
-      if(moveInput())abortTravel();else stepTravel(dt);
+    }else if(mode==='orbit'){
+      var orbTurn=(keys.arrowleft||keys.a?1:0)-(keys.arrowright||keys.d?1:0)-joy.x;
+      orb+=dt*(orbTurn?orbTurn*.9:.12);
     }else{
-      var fwd=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0)-joy.y;
-      var rgt=(keys.d?1:0)-(keys.a?1:0)+joy.x;
-      var turn=(keys.arrowleft&&keys.shift?1:0)-(keys.arrowright&&keys.shift?1:0);
-      P.yaw+=turn*dt*1.6;
-      if(fwd||rgt){
-        var spd=(keys.shift?9:4.2)*dt;
-        P.x+=(-Math.sin(P.yaw)*fwd+Math.cos(P.yaw)*rgt)*spd;
-        P.z+=(-Math.cos(P.yaw)*fwd-Math.sin(P.yaw)*rgt)*spd;collide();
-      }
+      var kFwd=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0);
+      var kRgt=(keys.d?1:0)-(keys.a?1:0);
+      var turn=(keys.arrowleft||keys.q?1:0)-(keys.arrowright||keys.e?1:0);
+      P.yaw+=turn*dt*1.95;
+      var fwd=kFwd-joy.y,rgt=kRgt+joy.x;
+      var mlen=Math.hypot(fwd,rgt),jMag=Math.hypot(joy.x,joy.y);
+      var baseSpd=keys.shift?8.6:(jMag>.82?6.4:4.5);
+      var tspd=mlen>.04?baseSpd*Math.min(1,mlen):0;
+      if(mlen>1e-4){fwd/=mlen;rgt/=mlen;}
+      var tvx=(-Math.sin(P.yaw)*fwd+Math.cos(P.yaw)*rgt)*tspd;
+      var tvz=(-Math.cos(P.yaw)*fwd-Math.sin(P.yaw)*rgt)*tspd;
+      var ease=1-Math.exp(-dt*14);
+      vx+=(tvx-vx)*ease;vz+=(tvz-vz)*ease;
+      var curSpd=Math.hypot(vx,vz);
+      if(curSpd>.02){
+        P.x+=vx*dt;P.z+=vz*dt;collide();
+        if(!REDUCE){bobPh+=dt*curSpd*1.75;P.bob=Math.sin(bobPh)*.026*clamp(curSpd/4.5,0,1);}
+      }else{vx=vz=0;P.bob*=Math.exp(-dt*10);}
     }
-    apply();
+    if(appStage==='free')updateProximity();
+    apply(dt);
     if(soft)softRender();else renderer.render(scene,cam);
-    if(tween&&tween.snap)snap();
-    if(jumpReq!==null){var ji=jumpReq,js=STOPS[ji];jumpReq=null;snap();P.x=js.x;P.z=js.z;P.yaw=js.yaw;P.pitch=0;P.bob=0;lookY=lookP=0;dissolve(.9);}
-    if((frame++)%3===0)drawPlan();
+    if((appStage==='free'&&mapboxEl&&mapboxEl.classList.contains('open'))||frame===0)drawPlan(now);
+    frame++;
     requestAnimationFrame(loop);
   }
-  show(0);
-  bootDone();
-  requestAnimationFrame(loop);
-  window.__devfest={go:go,follow:toggleFollow,orbit:function(){$('orbit').click();},get soft(){return soft;},recs:recs.length};
+
+  // Pre-warm shaders, geometries & textures across short rAF slices so #boot animates smoothly at 60fps with zero freeze!
+  window.__devfest={enterPortal:enterPortal,interact:triggerAction,follow:toggleFollow,orbit:toggleOrbit,startTour:startTour,unlockFree:unlockFreeExplore,get stage(){return appStage;},get modal(){return modalState;},get tour(){return tour;},get pos(){return P;},get prompt(){return activeAct&&activeAct.txt;},get quest(){return questStage;},get soft(){return soft;},recs:recs.length};
+  var warmPoses=[[3,2,65,0],[4,2,-58.8,-Math.PI/2],[EX,2,-43,Math.PI],[-40,2,-9,Math.PI/2],
+    [IX-4,2,22.8,-Math.PI/2],[IX-5,2.5,22.8,Math.PI/2],[IX,2,12,0],[IX,2,-8,Math.PI],
+    [ITX,2,-10,Math.PI],[ITX,2,-9,0],[ITX,2,8,0],[ITX,2,0,-Math.PI/2],
+    [MX,2,12,0],[MX,2,-8,Math.PI],[MX,2,11,Math.PI]],wi=0;
+  function finishBoot(){
+    if(renderer){apply(.016);renderer.render(scene,cam);}
+    show(0,true,true);
+    last=performance.now();
+    bootDone();
+    requestAnimationFrame(loop);
+  }
+  if(!renderer){finishBoot();return;}
+  stage(.66,'Compiling 3D shaders\u2026',.2);
+  requestAnimationFrame(function(){
+    if(renderer.compile)try{renderer.compile(scene,cam);}catch(e){}
+    (function warmStep(){
+      var end=Math.min(warmPoses.length,wi+4);
+      for(;wi<end;wi++){var v=warmPoses[wi];cam.position.set(v[0],v[1],v[2]);cam.rotation.set(0,v[3],0);renderer.render(scene,cam);}
+      stage(.68+.28*(wi/warmPoses.length),'Warming up venue spaces\u2026',.16);
+      if(wi<warmPoses.length)requestAnimationFrame(warmStep);
+      else requestAnimationFrame(finishBoot);
+    })();
+  });
 }
 })();
 </script>
@@ -1549,8 +2047,12 @@ function main(){
 <!-- ===== HUSS popup: "in this town everyone is attending DevFest 2026 except you" ===== -->
 <style>
 #hs{position:fixed;inset:0;z-index:200;display:none;place-items:center;padding:16px;background:radial-gradient(ellipse at 50% 40%,rgba(20,28,60,.78),rgba(4,6,16,.92));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-family:'Inter',system-ui,sans-serif}
-#hs.on{display:grid;animation:hsfade .4s ease}
+#hs.on{display:grid;animation:hsfade .36s cubic-bezier(.22,1,.36,1)}
+#hs.out{animation:hsout .25s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none}
+#hs.out .hs-card{animation:hspopout .25s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes hsfade{from{opacity:0}to{opacity:1}}
+@keyframes hsout{to{opacity:0}}
+@keyframes hspopout{to{transform:translateY(14px) scale(.94);opacity:0}}
 #hs canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .hs-card{position:relative;width:min(460px,100%);padding:28px 24px 22px;border-radius:26px;color:#fff;text-align:center;background:linear-gradient(160deg,#141a38,#0b1022 60%,#150f2e);box-shadow:0 0 0 1.5px rgba(255,255,255,.12),0 30px 90px rgba(0,0,0,.6),0 0 80px rgba(66,133,244,.25);animation:hspop .6s cubic-bezier(.2,1.3,.4,1)}
 @keyframes hspop{from{transform:translateY(30px) scale(.88);opacity:0}to{transform:none;opacity:1}}
@@ -1611,7 +2113,7 @@ function main(){
 .hs-steps{display:flex;justify-content:center;gap:6px;margin:12px 0 0;font:600 11.5px 'Inter',sans-serif;color:#8d99cc}
 .hs-steps span:not(:last-child):after{content:"→";margin-left:6px;opacity:.5}
 .hs-steps .on{color:#81c995}
-@media (prefers-reduced-motion:reduce){.hs-card,.hs-card:before,.hs-chip.lit,#hs.on{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.hs-card,.hs-card:before,.hs-chip.lit,#hs.on,#hs.out,#hs.out .hs-card{animation:none!important}}
 </style>
 <div id="hs" role="dialog" aria-modal="true" aria-labelledby="hsh">
   <canvas id="hsfx" aria-hidden="true"></canvas>
@@ -1646,8 +2148,9 @@ function main(){
       reg=document.getElementById('hsreg'),fx=document.getElementById('hsfx'),pill=document.getElementById('hspill'),
       RM=matchMedia('(prefers-reduced-motion: reduce)').matches,won=false,raf=0;
   if(REGISTER_URL)reg.href=REGISTER_URL;else{reg.removeAttribute('target');reg.onclick=function(e){e.preventDefault();hint.textContent='';};}
-  function open(){hs.classList.add('on');setTimeout(function(){if(!won)inp.focus();},250);}
-  function close(){hs.classList.remove('on');stop();try{sessionStorage.setItem('hussSeen','1');}catch(e){}}
+  function open(){if(window.__clearKeys)window.__clearKeys();hs.classList.remove('out');hs.classList.add('on');setTimeout(function(){if(!won)inp.focus();},250);}
+  function close(){if(!hs.classList.contains('on'))return;try{sessionStorage.setItem('hussSeen','1');}catch(e){}if(RM){hs.classList.remove('on');stop();return;}hs.classList.add('out');setTimeout(function(){hs.classList.remove('on','out');stop();},250);}
+  window.__openPass=open;
   function stop(){cancelAnimationFrame(raf);var c=fx.getContext('2d');c.clearRect(0,0,fx.width,fx.height);}
   ['keydown','keyup','keypress'].forEach(function(t){hs.addEventListener(t,function(e){e.stopPropagation();if(t==='keydown'&&e.key==='Escape')close();});});   // typing must not walk the camera
   function norm(v){return v.toLowerCase().replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim();}
@@ -1678,67 +2181,53 @@ function main(){
   document.getElementById('hsskip').onclick=close;document.getElementById('hsclose').onclick=close;
   pill.onclick=open;
   var seen=false;try{seen=sessionStorage.getItem('hussSeen')==='1';}catch(e){}
-  if(!seen){var wt=setInterval(function(){if(!document.getElementById('boot')){clearInterval(wt);setTimeout(function(){if(!hs.classList.contains('on'))open();},9000);}},300);}
+  if(!seen){var wt=setInterval(function(){if(document.documentElement.dataset.stage==='free'){clearInterval(wt);setTimeout(function(){if(document.documentElement.dataset.stage==='free'&&!hs.classList.contains('on'))open();},20000);}},400);}
 })();
 </script>
 <script>
 (function(){var box=document.getElementById('mapbox'),btn=document.getElementById('mapbtn');
   function set(o){box.classList.toggle('open',o);btn.setAttribute('aria-expanded',o?'true':'false');}
+  if(innerWidth>720)set(true);
   btn.addEventListener('click',function(e){e.stopPropagation();set(!box.classList.contains('open'));});
-  document.addEventListener('pointerdown',function(e){if(box.classList.contains('open')&&!box.contains(e.target))set(false);});
+  document.addEventListener('pointerdown',function(e){if(innerWidth<=720&&box.classList.contains('open')&&!box.contains(e.target))set(false);});
 })();
 </script>
 
 <style id="mobile-pass">
-/* ===== Mobile efficiency pass ===== */
-.prog,#morebtn{display:none}
-.prog{height:4px;border-radius:99px;background:var(--line);overflow:hidden;margin:0 2px}
-.prog i{display:block;height:100%;width:0;background:var(--blue);border-radius:99px;transition:width .35s ease}
+/* ===== Mobile game HUD pass ===== */
 html,body{overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 .ui,#scene,.joy{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-button,.btn,.pips button,#mapbtn{touch-action:manipulation}
+button,.btn,#mapbtn,#card{touch-action:manipulation}
 .ui{height:100dvh}
-.pips{min-width:0}
-.help{max-height:min(46dvh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-.joy{bottom:calc(env(safe-area-inset-bottom,0px) + var(--bh,210px) + 24px)}
+.help.on{max-height:min(46dvh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.joy{bottom:calc(env(safe-area-inset-bottom,0px) + var(--bh,120px) + 16px);transition:bottom .25s cubic-bezier(.22,1,.36,1)}
 #hs{overflow-y:auto;place-items:center;align-items:safe center}
 #hs .hs-card{margin:auto}
 
 @media (max-width:720px){
-  #morebtn{display:inline-flex}
   .ui{padding-block:calc(env(safe-area-inset-top,0px) + 8px) calc(env(safe-area-inset-bottom,0px) + 8px);
       padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px))}
   .top{gap:8px}
   .brand{padding:7px 10px;border-radius:9px}
   .eyebrow{font-size:9.5px;letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .eyebrow .dots i{width:6px;height:6px}
-  .brand h1{font-size:15px;margin:3px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand h1{font-size:15px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .quest{font-size:11px;margin-top:3px}
   #mapbtn{padding:8px 10px;font-size:12px}
-  .bottom{gap:7px;max-width:none}
-  .card{padding:10px 12px;border-radius:11px}
-  .step{font-size:10px}
-  .card h2{font-size:16px;margin:2px 0 4px}
-  .card p{font-size:13px;line-height:1.42}
-  #card{max-height:34dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-  .tag{margin-top:6px}
-  .pips{display:none}                       /* 25 dots cannot fit on a phone and sat on top of Next */
-  .prog{display:block}
-  .bottom{gap:10px}
-  .nav{gap:10px;flex-wrap:nowrap}
-  #prev,#next,#morebtn{min-height:48px;font-size:15px;border-radius:12px}
-  #prev{flex:1 1 0;padding:10px 12px}
-  #next{flex:1.5 1 0;padding:10px 12px}
-  #morebtn{flex:none;width:48px;padding:0;font-size:20px;line-height:1}
-  #morebtn[aria-expanded="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
-  /* secondary tools hidden behind the ... button, shown as a roomy 2-column grid */
-  .bottom>.nav:last-child{display:none}
-  .bottom.more-open>.nav:last-child{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .bottom>.nav:last-child button{min-height:44px;padding:9px 10px;font-size:13.5px;border-radius:10px;white-space:normal;line-height:1.2}
-  #mandirbtn{grid-column:1/-1}
+  .iconbtn{width:34px;min-height:34px;font-size:14px}
+  .hud-keys{display:none}
+  .bottom{gap:8px;max-width:none}
+  #prompt{padding:11px 18px;font-size:14px}
+  .card{padding:9px 12px;border-radius:12px}
+  .step{font-size:9.5px}
+  .card h2{font-size:15.5px;margin:2px 0 3px}
+  .card p{font-size:12.5px;line-height:1.4}
+  #card{max-height:28dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .tag{margin-top:5px}
   .help{font-size:12.5px}
   .links .btn{flex:1 1 140px}
-  .joy{width:88px;height:88px;left:max(12px,env(safe-area-inset-left,0px))}
-  .joy i{width:36px;height:36px;margin:-18px}
+  .joy{width:98px;height:98px;left:max(12px,env(safe-area-inset-left,0px))}
+  .joy i{width:40px;height:40px;margin:-20px}
   /* boot + popup */
   #boot{padding:12px}
   .bt-card{padding:22px 16px 16px;border-radius:22px}
@@ -1748,30 +2237,37 @@ button,.btn,.pips button,#mapbtn{touch-action:manipulation}
   .hs-card{padding:22px 16px 16px;border-radius:22px}
   .hs-h{font-size:22px}
   .hs-chip{padding:7px 12px;font-size:14px}
-  #hsin{font-size:16px}              /* >=16px stops iOS zooming into the field */
+  #hsin{font-size:16px}
   .tk-l b{font-size:22px}
   #hspill{padding:12px;min-width:44px;min-height:44px;justify-content:center}
   #hspill .dot{margin:0}
+  #gatecard{padding:10px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}
+  #tourmodal{padding:12px}
+  .gm-card{padding:16px 15px 14px;border-radius:18px}
+  .gm-card h2{font-size:19px;margin:8px 0 5px}
+  .gm-card p{font-size:13px;line-height:1.42;margin-bottom:12px}
+  .gm-btn{min-height:42px;font-size:14px;padding:10px 16px}
+  #toast{padding:9px 12px;border-radius:13px}
+  #toastbadge{font-size:10px;padding:3px 8px;margin-bottom:4px}
+  #toasttxt{font-size:13px;line-height:1.36}
 }
 
-/* very small phones */
 @media (max-width:360px){
   .eyebrow{display:none}
-  .card h2{font-size:15px}
-  #prev{padding-inline:10px}
+  .card h2{font-size:14.5px}
 }
 
-/* phones in landscape: short screen, so put the card in a side column and free up the view */
 @media (max-height:520px) and (orientation:landscape){
-  .brand .eyebrow,.brand .sub{display:none}
+  .brand .eyebrow{display:none}
   .brand h1{font-size:14px;margin:0}
   .brand{padding:6px 10px}
   .ui{padding-block:calc(env(safe-area-inset-top,0px) + 6px) calc(env(safe-area-inset-bottom,0px) + 6px)}
   .bottom{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 6px);
-          top:calc(env(safe-area-inset-top,0px) + 56px);width:min(340px,42vw);max-width:none;margin:0;justify-content:flex-end}
+          width:min(330px,46vw);max-width:none;margin:0;align-items:flex-end}
+  .hud-keys{display:none}
   #card{max-height:none;flex:0 1 auto}
-  .help{max-height:50dvh}
-  .joy{bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:80px;height:80px}
+  .help.on{max-height:50dvh}
+  .joy{bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:88px;height:88px}
   #hs{padding:8px}
   .hs-card{padding:16px 16px 12px}
   .hs-h{font-size:19px;margin:8px 0 4px}
@@ -1782,11 +2278,10 @@ button,.btn,.pips button,#mapbtn{touch-action:manipulation}
   .bt-how{display:none}
 }
 
-/* pause the decorative popup glow/float while the popup is closed (saves battery) */
 @media (pointer:coarse){#hspill{animation:none}#hspill:before{animation-duration:9s}}
 </style>
 <script>
-/* Mobile helpers: keep the 3D canvas in sync with the real visible area, and place the joystick above the bottom panel */
+/* Mobile helpers: keep the 3D canvas in sync with the real visible area, and place the joystick above the bottom HUD */
 (function(){
   function kick(){try{dispatchEvent(new Event('resize'));}catch(e){}}
   var t;function later(){clearTimeout(t);t=setTimeout(kick,220);}
@@ -1795,19 +2290,6 @@ button,.btn,.pips button,#mapbtn{touch-action:manipulation}
   var b=document.querySelector('.bottom');
   function setBH(){if(b)document.documentElement.style.setProperty('--bh',Math.round(b.getBoundingClientRect().height)+'px');}
   if(b){if(window.ResizeObserver)new ResizeObserver(setBH).observe(b);setBH();}
-  var nav=document.querySelector('.bottom>.nav'),pips=document.getElementById('pips');
-  if(b&&nav&&pips){
-    var prog=document.createElement('div');prog.className='prog';prog.setAttribute('aria-hidden','true');prog.innerHTML='<i></i>';
-    b.insertBefore(prog,nav);
-    var more=document.createElement('button');more.id='morebtn';more.type='button';more.textContent='⋯';
-    more.setAttribute('aria-label','More tools');more.setAttribute('aria-expanded','false');
-    nav.appendChild(more);
-    more.addEventListener('click',function(){var o=b.classList.toggle('more-open');more.setAttribute('aria-expanded',o?'true':'false');});
-    function upd(){var k=pips.children,n=k.length,c=0;for(var i=0;i<n;i++)if(k[i].getAttribute('aria-current')==='true')c=i;
-      prog.firstChild.style.width=(n>1?((c+1)/n*100):0)+'%';}
-    new MutationObserver(upd).observe(pips,{subtree:true,attributes:true,attributeFilter:['aria-current']});upd();
-  }
-  /* pause rendering cost when the tab is hidden is handled by rAF; also stop pull-to-refresh/gesture zoom over the scene */
   document.addEventListener('gesturestart',function(e){e.preventDefault();},{passive:false});
 })();
 </script>

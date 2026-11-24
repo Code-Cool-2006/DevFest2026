@@ -383,8 +383,8 @@ function performBackgroundCaching() {
 
 function shouldSkipPreloaderOnInit() {
   if (typeof window === 'undefined') return false
-  const path = window.location.pathname.replace(/\/+$/, '') || '/'
-  if (path === '/team') return true
+  const path = (window.location.pathname.replace(/\/+$/, '') || '/').toLowerCase()
+  if (path === '/team' || path === '/teams') return true
   try {
     if (sessionStorage.getItem('devfest_skip_next_preloader') === '1') {
       sessionStorage.removeItem('devfest_skip_next_preloader')
