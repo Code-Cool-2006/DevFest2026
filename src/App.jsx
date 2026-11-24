@@ -33,6 +33,7 @@ export default function App() {
         return
       }
       if (url.origin !== window.location.origin) return
+      if (url.pathname.endsWith('.html')) return
 
       const nextPath = url.pathname.replace(/\/+$/, '') || '/'
       const curPath = window.location.pathname.replace(/\/+$/, '') || '/'
